@@ -1,10 +1,11 @@
 //SEE
 //https://gist.github.com/steveharoz/8c3e2524079a8c440df60c1ab72b5d03#file-code-js
 //http://pablobarbera.com/big-data-upf/html/02b-networks-descriptive-analysis.html
+//https://bl.ocks.org/steveharoz/raw/8c3e2524079a8c440df60c1ab72b5d03/
 
 //Variables
-var circlefact = 150;
-var strength   = 1000;
+var node_size = 150;
+var link_size = 1;
 var outercolor = "#2B3E50";
 var linkcolor = "white";
 var selected_nodes = [];
@@ -20,23 +21,44 @@ var uniquetype = ["M","F","O"];
 var uniquecolor = ["Química teórica", "Baterías de flujo","Química práctica",
 "Química cuántica","Química de alimentos"];
 
+var forceProperties = {
+    center: {
+        x: 0.5,
+        y: 0.5
+    },
+    charge: {
+        enabled: true,
+        strength: 1000,
+        distanceMin: 1,
+        distanceMax: 2000
+    },
+    collide: {
+        enabled: true,
+        strength: .7,
+        iterations: 1,
+        radius: 5
+    },
+    forceX: {
+        enabled: false,
+        strength: .1,
+        x: .5
+    },
+    forceY: {
+        enabled: false,
+        strength: .1,
+        y: .5
+    },
+    link: {
+        enabled: true,
+        distance: 30,
+        iterations: 1
+    }
+}
 
 //Additional functions
 function onlyUnique(value, index, self) {
     return self.indexOf(value) === index;
 }
-
-/*
-Shiny.addCustomMessageHandler('force', function(myforce) {
-    strength = myforce;
-    updateAll();
-});
-
-Shiny.addCustomMessageHandler('scale', function(myscale) {
-    circlefact = myscale;
-    updateAll();
-});
-*/
 
 //Get d3js symbols
 var d3symbols = [d3.symbolTriangle, d3.symbolSquare, d3.symbolCircle,
@@ -101,25 +123,52 @@ function initializeSimulation() {
 
 // add forces to the simulation
 function initializeForces() {
+
     // add forces and associate each with a name
     simulation
         .force("link", d3.forceLink())
         .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(width / 2, height / 2));
-
+        .force("collide", d3.forceCollide())
+        .force("center",  d3.forceCenter(width / 2, height / 2))
+        .force("forceX", d3.forceX())
+        .force("forceY", d3.forceY());
     // apply properties to each of the forces
     updateForces();
 }
 
+
+
 // apply new force properties
 function updateForces() {
 
-    simulation.force("charge")
-        .strength(-1*strength);
-    simulation.force("link")
-        .id(function(d) {return d.id;});
+  // get each force by name and update the properties
+  simulation.force("center")
+      .x(width * forceProperties.center.x)
+      .y(height * forceProperties.center.y);
+  simulation.force("charge")
+      .strength(-1*forceProperties.charge.strength)
+      .distanceMin(forceProperties.charge.distanceMin)
+      .distanceMax(forceProperties.charge.distanceMax);
+  simulation.force("collide")
+      .strength(forceProperties.collide.strength)
+      .radius(forceProperties.collide.radius)
+      .iterations(forceProperties.collide.iterations);
+  simulation.force("forceX")
+      .strength(forceProperties.forceX.strength * forceProperties.forceX.enabled)
+      .x(width * forceProperties.forceX.x);
+  simulation.force("forceY")
+      .strength(forceProperties.forceY.strength * forceProperties.forceY.enabled)
+      .y(height * forceProperties.forceY.y);
+  simulation.force("link")
+      .id(function(d) {return d.id;})
+      .distance(forceProperties.link.distance)
+      .iterations(forceProperties.link.iterations)
+      .links(forceProperties.link.enabled ? graph.links : []);
 
-    simulation.alpha(1).restart();
+  // updates ignored until this is run
+  // restarts the simulation (important if simulation has already slowed down)
+  simulation.alpha(1).restart();
+
 }
 
 function SelectDeselect(poparray, pusharray, myvar, nodepop){
@@ -160,7 +209,7 @@ function initializeDisplay() {
       .selectAll("line")
       .data(graph.links)
       .enter().append("line")
-      .attr("stroke-width", function(d) { return (d.colabs); })
+      .attr("stroke-width", function(d) { return (link_size*d.colabs); })
       .style("stroke", linkcolor)
       .on("click", function(d) {
         SelectDeselect(selected_nodes, selected_links, this, true);
@@ -206,7 +255,8 @@ node = inner.append("g")
 
 for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
   d3.selectAll("." + uniquetype[i]).append("path")
-    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return circlefact*Math.log(d.pubs + 2)}));
+    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*Math.log(d.pubs + 2)}))
+    .attr("class", "vertices" + i);
 }
 
 for (var i = 0; i < uniquecolor.length; i++){
@@ -241,8 +291,14 @@ function ticked() {
 
 // update the display based on the forces (but not positions)
 function updateDisplay() {
-    node.attr("r", function(d) {return  circlefact*Math.log(d.pubs + 2)})
+  for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
+    d3.selectAll(".vertices" + i)
+      .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*Math.log(d.pubs + 2)}));
+  }
+  d3.selectAll("line")
+  .attr("stroke-width", function(d) { return (link_size*d.colabs); })
 }
+//TODO FIXME
 
 
 // convenience function to update everything (run after UI input)
@@ -288,7 +344,7 @@ function show_tooltip_link(d, mydiv, mybool) {
   //$("#linkornode").text("LINK")
   //Add node Header
   if (mybool) {
-    $("#nodename").text(thename);
+    $("#nodename").text(thename.toUpperCase());
     $("#nodep").html(content);
   };
 }
@@ -313,7 +369,7 @@ function show_tooltip_node(d, mydiv, clicked) {
 
   //Add node Header
   if (clicked) {
-    $("#nodename").text(thename);
+    $("#nodename").text(thename.toUpperCase());
     $("#nodep").html(content);
   };
 

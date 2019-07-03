@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+a<!DOCTYPE html>
 <!-- FROM: https://www.d3-graph-gallery.com/graph/network_basic.html -->
 <meta charset="utf-8">
 <meta name='viewport' content='width=device-width, initial-scale=1'>
@@ -56,26 +56,33 @@ div.tooltip {
 
 .panel-container {
   height: 100vh;
-  width: 25%;
+  width: 20%;
   position: fixed;
-  text-align: center;
-  opacity: 0.90;
+  text-align: left;
+  padding-top: 25px;
+  opacity: 0.95;
+  overflow-y: scroll;
 }
 
 .stats-container {
   top: 0px;
   right: 0px;
-  padding-top: 0px;
-  overflow-y: scroll;
+}
+
+.first-rightpanel {
+  right: 0%;
+  width: 20%;
+}
+
+.second-rightpanel{
+  right: 20%;
+  width: 20%;
 }
 
 .analysis-container {
-  ftop: 0px;
+  top: 0px;
   left: 0px;
-  padding-top: 0px;
   padding-right: 0px;
-  padding-left: 20px;
-  padding-right: 20px;
 }
 
 .full-width {
@@ -87,7 +94,6 @@ div.tooltip {
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="palette.js"></script>
-<script src="interactive_dom.js"></script>
 
 
 </head>
@@ -95,78 +101,104 @@ div.tooltip {
 <script src="d3.v4.js"></script>
 
 <!-- Create a div where the graph will take place -->
-<div class="card panel-container analysis-container border-info">
-  <ul class="nav nav-tabs nav-justified">
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#data">DATA</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#analysis">ANALYSIS</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#options">OPTIONS</a>
-    </li>
-  </ul>
-  <div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade show active" id="data">
-      <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+<div class="card panel-container analysis-container border-info bg-dark" id = "leftpanel">
+  <div class="card-body">
+    <div class="card border-info mb-3" style="max-width: 20rem;">
+      <div class="card-header"><h5>DATA</h5></div>
+      <div class="card-body">
+        <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
+        <p class="card-text">CONTENT</p>
+      </div>
     </div>
-    <div class="tab-pane fade" id="analysis">
-      <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit.</p>
+    <div class="card border-info mb-3" style="max-width: 20rem;">
+      <div class="card-header"><h5>FILTERS</h5></div>
+      <div class="card-body">
+        <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
+        <p class="card-text">CONTENT</p>
+      </div>
+    </div>
+    <div class="card border-info mb-3" style="max-width: 20rem;">
+      <div class="card-header"><h5>OPTIONS</h5></div>
+      <div class="card-body">
+        <div class="form-group">
+          <label class="col-form-label" for="inputNodeSize">Node size</label>
+          <input type="number" class="form-control" placeholder="Node size" value="150" id="inputNodeSize">
+          <label class="col-form-label" for="inputLinkSize">Link size</label>
+          <input type="number" class="form-control" placeholder="Link size" value="1" id="inputLinkSize">
+          <label class="col-form-label" for="inputStrength">Charge Strength</label>
+          <input type="number" class="form-control" placeholder="Strength" value="1000" id="inputStrength">
+          <label class="col-form-label" for="inputCenterX">Center X</label>
+          <input type="number" class="form-control" placeholder="Center X" id="inputCenterX">
+          <label class="col-form-label" for="inputCenterY">Center Y</label>
+          <input type="number" class="form-control" placeholder="Center Y" id="inputCenterY">
+          <label class="col-form-label" for="inputDistanceMin">Min charge distance</label>
+          <input type="number" class="form-control" placeholder="Charge distance min" id="inputDistanceMin">
+          <label class="col-form-label" for="inputDistanceMax">Max charge distance</label>
+          <input type="number" class="form-control" placeholder="Charge distance max" id="inputDistanceMax">
+          <label class="col-form-label" for="inputCollision">Collision</label>
+          <input type="number" class="form-control" placeholder="Collision" value="0.8" id="inputCollision">
+          <label class="col-form-label" for="inputXGravity">Gravity-X</label>
+          <input type="number" class="form-control" placeholder="X Gravity" value="1000" id="inputXGravity">
+          <label class="col-form-label" for="inputYGravity">Gravity-Y</label>
+          <input type="number" class="form-control" placeholder="Y Gravity" value="1000" id="inputYGravity">
+          <label class="col-form-label" for="inputLinkDistance">Link Distance</label>
+          <input type="number" class="form-control" placeholder="Link Distance" value="10" id="inputLinkDistance">
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="stats-container card border-info mb-3 bg-dark panel-container" style="padding-top: 25px" id = "rightpanel">
+<div class="stats-container card border-warning mb-3 bg-dark panel-container first-rightpanel" id = "rightpanel">
   <div class="card-body">
-    <div class="card border-light mb-3" style="max-width: 20rem;">
-      <div class="card-header"><h5 id ="nodename">Node</h5></div>
+    <div class="card border-warning mb-3" style="max-width: 20rem;">
+      <div class="card-header"><h5 id ="nodename">NODE</h5></div>
       <div class="card-body">
         <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
         <p class="card-text" id="nodep">CONTENT</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-warning mb-3" style="max-width: 20rem;">
       <div class="card-header">Collaborators</div>
       <div class="card-body">
         <!--<h4 class="card-title">Collaborators</h4-->
         <p class="card-text">Some</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-warning mb-3" style="max-width: 20rem;">
       <div class="card-header">Articles</div>
       <div class="card-body">
         <!--<h4 class="card-title">Primary card title</h4>-->
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-warning mb-3" style="max-width: 20rem;">
       <div class="card-header">Statistics</div>
       <div class="card-body container-fluid">
         <div class="row">
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Page-Rank</div>
+          <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Page-Rank</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Eigencentrality</div>
+          <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Centrality</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Betweenes</div>
+          <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Betweenes</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-            <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-              <div class="card-header">Closeness</div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+              <div class="card-header"><small>Closeness</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -174,14 +206,14 @@ div.tooltip {
             </div>
           </div>
           <div class="row">
-              <div class="card border-primary mb  col-xs-5" style="width: 45%; height: 10%; margin-right: 2%; margin-left: 2.5%;">
-                <div class="card-header">Degree</div>
+              <div class="card border-warning mb  col-xs-5" style="width: 45%; height: 10%; margin-right: 2%; margin-left: 2.5%;">
+                <div class="card-header"><small>Degree</small></div>
                 <div class="card-body">
                   <p class="card-text">Some quick example.</p>
                 </div>
               </div>
-              <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-                <div class="card-header">Strength</div>
+              <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+                <div class="card-header"><small>Strength</small></div>
                 <div class="card-body">
                   <!--<h4 class="card-title">Primary card title</h4>-->
                   <p class="card-text">Some quick example.</p>
@@ -189,8 +221,8 @@ div.tooltip {
               </div>
             </div>
           <div class="row">
-            <div class="card border-primary mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-              <div class="card-header">Authority score</div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+              <div class="card-header"><small>Authority score</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -203,56 +235,56 @@ div.tooltip {
 </div>
 
 <!--- --->
-<div class="stats-container card border-info mb-3 bg-dark panel-container" style="padding-top: 25px; right: 0%;" id = "panelgraph">
+<div class="stats-container card border-danger mb-3 bg-dark panel-container second-rightpanel" id = "panelgraph">
   <div class="card-body">
-    <div class="card border-light mb-3" style="max-width: 20rem;">
+    <div class="card border-danger mb-3" style="max-width: 20rem;">
       <div class="card-header"><h5>GRAPH</h5></div>
       <div class="card-body">
         <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
-        <p class="card-text">CONTENT</p>
+        <p class="card-text">FILENAME + FILTERS</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-danger mb-3" style="max-width: 20rem;">
       <div class="card-header">Highest degree nodes</div>
       <div class="card-body">
         <!--<h4 class="card-title">Collaborators</h4-->
         <p class="card-text">Some</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-danger mb-3" style="max-width: 20rem;">
       <div class="card-header">Highest weighted links</div>
       <div class="card-body">
         <!--<h4 class="card-title">Primary card title</h4>-->
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-danger mb-3" style="max-width: 20rem;">
       <div class="card-header">Statistics</div>
       <div class="card-body container-fluid">
         <div class="row">
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Mean distance</div>
+          <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Distance</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Diameter</div>
+          <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Diameter</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-          <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-            <div class="card-header">Edge density</div>
+          <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+            <div class="card-header"><small>Edge density</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-            <div class="card border-primary mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-              <div class="card-header">Reciprocity</div>
+            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+              <div class="card-header"><small>Reciprocity</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -260,8 +292,8 @@ div.tooltip {
             </div>
           </div>
           <div class="row">
-            <div class="card border-primary mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;">
-              <div class="card-header">Transitivity</div>
+            <div class="card border-danger mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;">
+              <div class="card-header"><small>Transitivity</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -270,7 +302,7 @@ div.tooltip {
           </div>
       </div>
     </div>
-    <div class="card border-primary mb-3" style="max-width: 20rem;">
+    <div class="card border-danger mb-3" style="max-width: 20rem;">
       <div class="card-header">Coreness</div>
       <div class="card-body">
         <!--<h4 class="card-title">Primary card title</h4>-->
@@ -280,9 +312,11 @@ div.tooltip {
   </div>
 </div>
 
-<button class="hidebutton card border-danger bg-danger" style="font-size: 20px; right: 82px;" id = "graphpanel"><b>G↳</b></button>
-<button class="hidebutton card border-warning bg-warning" style="font-size: 20px; right: 0px;" id = "nodepanel"><b>↲N</b></button>
+<button class="hidebutton card border-info bg-info" style="font-size: 20px; left: 0px;" id = "datapanel"><b>D↳</b></button>
+<button class="hidebutton card border-danger bg-danger second-rightpanel" style="font-size: 20px; width: 80px;" id = "graphpanel"><b>↲G</b></button>
+<button class="hidebutton card border-warning bg-warning first-rightpanel" style="font-size: 20px; width: 80px;" id = "nodepanel"><b>↲N</b></button>
 
 <div id="my_dataviz" style="text-align: center; height: 100vh;"></div>
 
 <script src="node_script.js"></script>
+<script src="interactive_dom.js"></script>
