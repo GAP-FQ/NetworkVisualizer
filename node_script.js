@@ -1,12 +1,30 @@
 //SEE
 //https://gist.github.com/steveharoz/8c3e2524079a8c440df60c1ab72b5d03#file-code-js
+//http://pablobarbera.com/big-data-upf/html/02b-networks-descriptive-analysis.html
+
 //Variables
-var circlefact = 10;
+var circlefact = 150;
 var strength   = 1000;
 var outercolor = "#2B3E50";
 var linkcolor = "white";
 var selected_nodes = [];
 var selected_links = [];
+var selected_color = "orange";
+var selected_size = 7;
+var node_border_size = 0.5
+var database = "data1.json";
+var typename = "gender";
+var colorname = "depto";
+var sizename = "pubs";
+var uniquetype = ["M","F","O"];
+var uniquecolor = ["Química teórica", "Baterías de flujo","Química práctica",
+"Química cuántica","Química de alimentos"];
+
+
+//Additional functions
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
 
 /*
 Shiny.addCustomMessageHandler('force', function(myforce) {
@@ -19,6 +37,12 @@ Shiny.addCustomMessageHandler('scale', function(myscale) {
     updateAll();
 });
 */
+
+//Get d3js symbols
+var d3symbols = [d3.symbolTriangle, d3.symbolSquare, d3.symbolCircle,
+  d3.symbolStar,d3.symbolDiamond, d3.symbolWye, d3.symbolCross];
+
+var mycolors = palette('mpn65', uniquecolor.length);
 
 // set the dimensions and margins of the graph
 var margin  = {top: 10, right: 10, bottom: 10, left: 10};
@@ -56,7 +80,7 @@ svg.call(d3.zoom().on("zoom", function () {
 svg.on("click",
   function(){
     while (selected_nodes.length > 0) {
-      d3.select(selected_nodes.pop()).style("stroke-width",0);
+      d3.select(selected_nodes.pop()).style("stroke-width", node_border_size).style("stroke",linkcolor);
     }
     while (selected_links.length > 0){
       d3.select(selected_links.pop()).style("stroke", linkcolor);
@@ -98,6 +122,37 @@ function updateForces() {
     simulation.alpha(1).restart();
 }
 
+function SelectDeselect(poparray, pusharray, myvar, nodepop){
+
+  //Stop d3js propagation
+  d3.event.stopPropagation();
+
+
+  //Push node to change color
+  if (poparray.length > 0){
+      var popable = poparray.pop();
+      d3.select(popable).style("stroke", linkcolor);
+  }
+
+  //Pop links
+  var pushable = pusharray.pop();
+  d3.select(pushable).style("stroke", linkcolor);
+
+  //Add var to array
+  pusharray.push(myvar);
+  d3.select(myvar).style("stroke", selected_color);
+
+  //Check if first variable is node
+  if (nodepop){
+    d3.select(popable).style("stroke-width", node_border_size);
+  } else {
+    d3.select(pushable).style("stroke-width", node_border_size);
+    d3.select(myvar).style("stroke-width", selected_size);
+  }
+
+}
+
+
 // generate the svg objects and force simulation
 function initializeDisplay() {
 
@@ -108,20 +163,11 @@ function initializeDisplay() {
       .attr("stroke-width", function(d) { return (d.colabs); })
       .style("stroke", linkcolor)
       .on("click", function(d) {
-        d3.event.stopPropagation();
-        /*if (!selected_links.includes(this)){
-            selected_links.push(this);
-          }*/
-        if (selected_nodes.length > 0){
-            selected_nodes.pop();
-        }
-        d3.select(selected_links.pop()).style("stroke", linkcolor);
-        selected_links.push(this);
-        d3.select(this).style("stroke","red");
+        SelectDeselect(selected_nodes, selected_links, this, true);
         return show_tooltip_link(d, div2, true);
       })
       .on("mouseover", function(d) {
-        d3.select(this).style("stroke","red");
+        d3.select(this).style("stroke", selected_color);
         return show_tooltip_link(d, div2, false);})
       .on("mouseout", function(d) {
         if (!selected_links.includes(this)){
@@ -135,31 +181,21 @@ node = inner.append("g")
     .selectAll(".node")
     .data(graph.nodes)
     .enter().append("g")
-    .style("stroke", "red").style("stroke-width",0)
-    .style("fill", function(d) {return d.color})
+    .style("stroke", "white").style("stroke-width", node_border_size)
     .attr("class", function(d) {
-      return d.type + " node";
+      return d[typename].replace(/\s/g,'') + " node" + " " + d[colorname].replace(/\s/g,'');
     })
     .on("mouseover", function(d) {
-          d3.select(this).style("stroke-width",3);
+          d3.select(this).style("stroke-width", selected_size).style("stroke",selected_color);
           return show_tooltip_node(d, div, false);
         })
     .on("click", function(d) {
-      d3.event.stopPropagation();
-      /*if (!selected_nodes.includes(this)){
-          selected_nodes.push(this);
-      }*/
-      if (selected_links.length > 0){
-        selected_links.pop();
-      }
-      d3.select(selected_nodes.pop()).style("stroke-width", 0);
-      selected_nodes.push(this);
-      d3.select(this).style("stroke-width",3);
+      SelectDeselect(selected_links, selected_nodes, this, false)
       return show_tooltip_node(d, div, true);
     })
     .on("mouseout", function(d) {
       if (!selected_nodes.includes(this)){
-        d3.select(this).style("stroke-width",0);
+        d3.select(this).style("stroke-width", node_border_size).style("stroke",linkcolor);
       }
       hide_tooltip(div);
     })
@@ -168,28 +204,18 @@ node = inner.append("g")
        .on("drag", dragged)
        .on("end", dragended));
 
-d3.selectAll(".triangle-down").append("rect")
-  .attr("width", function(d) {return circlefact*Math.log(d.pubs + 2)})
-  .attr("height",function(d) {return circlefact*Math.log(d.pubs + 2)})
-  .attr("x", "-16px")
-  .attr("y", "-16px")
-  .attr("class", function(d) {
-     return "color_" + d.color
-  }).size(1000);
-
-d3.selectAll(".triangle-up").append("ellipse")
-  .attr("rx", function(d) {return 0.5*circlefact*Math.log(d.pubs + 2)})
-  .attr("ry",function(d) {return 0.5*circlefact*Math.log(d.pubs + 2)})
-  .attr("width", function(d) {return circlefact*Math.log(d.pubs + 2)})
-  .attr("height",function(d) {return circlefact*Math.log(d.pubs + 2)})
-  .attr("x", "-16px")
-  .attr("y", "-16px")
-  .attr("class", function(d) {
-     return "color_" + d.color
-  });
+for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
+  d3.selectAll("." + uniquetype[i]).append("path")
+    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return circlefact*Math.log(d.pubs + 2)}));
 }
 
-d3.json("data.json", function(error, _graph) {
+for (var i = 0; i < uniquecolor.length; i++){
+  d3.selectAll("." + uniquecolor[i].replace(/\s/g,'')).style("fill",  "#" + mycolors[i]);
+}
+
+}
+
+d3.json(database, function(error, _graph) {
   if (error) throw error;
   graph = _graph;
   initializeDisplay();
@@ -283,8 +309,7 @@ function show_tooltip_node(d, mydiv, clicked) {
   mydiv.html("<div class='card-header'><h5>" + d.name + "</h5></div>" +
   "<div class = 'card-body'>" + content + "</div>")
       .style("left", (d3.event.pageX) + "px")
-      .style("top", (d3.event.pageY - 28) + "px")
-      .style("border-color", "red");
+      .style("top", (d3.event.pageY - 28) + "px");
 
   //Add node Header
   if (clicked) {
