@@ -21,39 +21,6 @@ var uniquetype = ["M","F","O"];
 var uniquecolor = ["Química teórica", "Baterías de flujo","Química práctica",
 "Química cuántica","Química de alimentos"];
 
-var forceProperties = {
-    center: {
-        x: 0.5,
-        y: 0.5
-    },
-    charge: {
-        enabled: true,
-        strength: 1000,
-        distanceMin: 1,
-        distanceMax: 2000
-    },
-    collide: {
-        enabled: true,
-        strength: .7,
-        iterations: 1,
-        radius: 5
-    },
-    forceX: {
-        enabled: false,
-        strength: .1,
-        x: .5
-    },
-    forceY: {
-        enabled: false,
-        strength: .1,
-        y: .5
-    },
-    link: {
-        enabled: true,
-        distance: 30,
-        iterations: 1
-    }
-}
 
 //Additional functions
 function onlyUnique(value, index, self) {
@@ -74,6 +41,36 @@ var innerWidth   = outerWidth  - margin.left  - margin.right,
     innerHeight  = outerHeight - margin.top   - margin.bottom,
     width        = innerWidth  - padding.left - padding.right,
     height       = innerHeight - padding.top  - padding.bottom;
+
+
+const forcePropertiesOriginal = {
+    center: {
+        x: 0.5,
+        y: 0.5
+    },
+    charge: {
+        strength: 1000,
+        distanceMin: 1,
+        distanceMax: 2000
+    },
+    collide: {
+        strength: .7,
+        radius: 5
+    },
+    forceX: {
+        strength: 0.1,
+        x: 0.5
+    },
+    forceY: {
+        strength: 0.1,
+        y: 0.5
+    },
+    link: {
+        distance: 30,
+    }
+}
+
+var forceProperties =  $.extend(true,{},forcePropertiesOriginal);
 
 //Creation of canvas
 var svg = d3.select('#my_dataviz').append('svg')
@@ -152,18 +149,15 @@ function updateForces() {
   simulation.force("collide")
       .strength(forceProperties.collide.strength)
       .radius(forceProperties.collide.radius)
-      .iterations(forceProperties.collide.iterations);
   simulation.force("forceX")
-      .strength(forceProperties.forceX.strength * forceProperties.forceX.enabled)
+      .strength(forceProperties.forceX.strength)
       .x(width * forceProperties.forceX.x);
   simulation.force("forceY")
-      .strength(forceProperties.forceY.strength * forceProperties.forceY.enabled)
+      .strength(forceProperties.forceY.strength)
       .y(height * forceProperties.forceY.y);
   simulation.force("link")
       .id(function(d) {return d.id;})
-      .distance(forceProperties.link.distance)
-      .iterations(forceProperties.link.iterations)
-      .links(forceProperties.link.enabled ? graph.links : []);
+      .distance(forceProperties.link.distance);
 
   // updates ignored until this is run
   // restarts the simulation (important if simulation has already slowed down)
