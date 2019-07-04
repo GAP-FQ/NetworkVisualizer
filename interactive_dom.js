@@ -41,7 +41,7 @@ $(document).ready(function(){
       $("#datapanel").animate({'left':'0px'});
 
       $("#fpanel").animate({'left':'20%'});
-      $("#filterpanel").animate({'left':'6.3%'});
+      $("#filterpanel").animate({'left':'13.7%'});
 
       $("#optpanel").animate({'left':'20%'});
       $("#optionpanel").animate({'left':'20%'});
@@ -66,7 +66,7 @@ $(document).ready(function(){
       $("#filterpanel").animate({'left':'20%'});
 
       $("#optpanel").animate({'left':'40%'});
-      $("#optionpanel").animate({'left':'26.3%'});
+      $("#optionpanel").animate({'left':'40%'});
 
     } else if (!fpanel & !dpanel & opanel){
 
@@ -85,10 +85,10 @@ $(document).ready(function(){
       $("#datapanel").animate({'left':'0px'});
 
       $("#fpanel").animate({'left':'20%'});
-      $("#filterpanel").animate({'left':'6.3%'});
+      $("#filterpanel").animate({'left':'20%'});
 
       $("#optpanel").animate({'left':'20%'});
-      $("#optionpanel").animate({'left':'12.6%'});
+      $("#optionpanel").animate({'left':'26.3%'});
 
     } else if (fpanel & !dpanel & !opanel){
 
@@ -99,7 +99,7 @@ $(document).ready(function(){
       $("#filterpanel").animate({'left':'6.3%'});
 
       $("#optpanel").animate({'left':'20%'});
-      $("#optionpanel").animate({'left':'12.6%'});
+      $("#optionpanel").animate({'left':'20%'});
 
     } else if (!fpanel & !dpanel & !opanel){
 
