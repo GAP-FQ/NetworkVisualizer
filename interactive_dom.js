@@ -1,5 +1,7 @@
 var npanel = true;
 var dpanel = true;
+var fpanel = true;
+var opanel = true;
 
 $(document).ready(function(){
 
@@ -19,6 +21,101 @@ $(document).ready(function(){
   $("#inputYGravityCoordinate").val(forceProperties.forceY.y);
   $("#inputLinkDistance").val(forceProperties.link.distance);
 
+  function FixPanels(){
+
+    //All panels open
+    if (fpanel & dpanel & opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'20%'});
+      $("#filterpanel").animate({'left':'20%'});
+
+      $("#optpanel").animate({'left':'40%'});
+      $("#optionpanel").animate({'left':'40%'});
+
+    } else if (!fpanel & dpanel & opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'20%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'20%'});
+      $("#optionpanel").animate({'left':'20%'});
+
+    } else if (fpanel & !dpanel & opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'0%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'20%'});
+      $("#optionpanel").animate({'left':'20%'});
+
+    } else if (fpanel & dpanel & !opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'20%'});
+      $("#filterpanel").animate({'left':'20%'});
+
+      $("#optpanel").animate({'left':'40%'});
+      $("#optionpanel").animate({'left':'26.3%'});
+
+    } else if (!fpanel & !dpanel & opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'0%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'0%'});
+      $("#optionpanel").animate({'left':'12.6%'});
+
+    } else if (!fpanel & dpanel & !opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'20%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'20%'});
+      $("#optionpanel").animate({'left':'12.6%'});
+
+    } else if (fpanel & !dpanel & !opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'0%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'20%'});
+      $("#optionpanel").animate({'left':'12.6%'});
+
+    } else if (!fpanel & !dpanel & !opanel){
+
+      $("#leftpanel").animate({'left':'0%'});
+      $("#datapanel").animate({'left':'0px'});
+
+      $("#fpanel").animate({'left':'0%'});
+      $("#filterpanel").animate({'left':'6.3%'});
+
+      $("#optpanel").animate({'left':'0%'});
+      $("#optionpanel").animate({'left':'12.6%'});
+
+    }
+
+  }
+
   //Close gpanel
   $("#datapanel").click(function(){
 
@@ -28,17 +125,35 @@ $(document).ready(function(){
     //Toogle node panel
     $("#leftpanel").slideToggle();
 
-    //Check if gpanel is open
-    if (!dpanel){
-      $("#optpanel").animate({'left':'0%'});
-      $("#optionpanel").animate({'left':'80px'})
-    } else if (dpanel) {
-      $("#optpanel").animate({'left':'20%'});
-      $("#optionpanel").animate({'left':'20%'})
-    }
+    //If datapanel is closed but options and filter open
+    FixPanels();
 
   });
-  $("#datapanel").trigger( "click" );
+  //Click o
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 68) {
+      $("#datapanel").trigger( "click" );
+    }
+  });
+
+  //Close gpanel
+  $("#filterpanel").click(function(){
+
+    //Change npanel
+    fpanel = !fpanel;
+
+    //Toogle node panel
+    $("#fpanel").slideToggle();
+
+    FixPanels();
+
+  });
+  //Click o
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 70) {
+      $("#filterpanel").trigger( "click" );
+    }
+  });
 
   //Close gpanel
   $("#nodepanel").click(function(){
@@ -52,24 +167,44 @@ $(document).ready(function(){
     //Check if gpanel is open
     if (!npanel){
       $("#panelgraph").animate({'right':'0%'});
-      $("#graphpanel").animate({'right':'80px'})
+      $("#graphpanel").animate({'right':'6.3%'})
     } else if (npanel) {
       $("#panelgraph").animate({'right':'20%'});
       $("#graphpanel").animate({'right':'20%'})
     }
 
   });
+  //Click o
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 78) {
+      $("#nodepanel").trigger( "click" );
+    }
+  });
 
   //Close gpanel
   $("#optionpanel").click(function(){
+    opanel = !opanel;
     $("#optpanel").slideToggle();
+    FixPanels();
   });
+  //Click o
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 79) {
+      $("#optionpanel").trigger( "click" );
+    }
+  });
+
 
   //Close gpanel
   $("#graphpanel").click(function(){
     $("#panelgraph").slideToggle();
   });
-  $("#graphpanel").trigger( "click" );
+  //Click o
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode == 71) {
+      $("#graphpanel").trigger( "click" );
+    }
+  });
 
   //Read data
   $("#inputStrength").change(function(){
@@ -160,5 +295,14 @@ $(document).ready(function(){
     updateAll();
 
   })
+
+  //Hide on start
+  $("#filterpanel").trigger( "click" );
+  $("#graphpanel").trigger( "click" );
+  $("#nodepanel").trigger( "click" );
+  $("#optionpanel").trigger( "click" );
+
+
+
 
 });

@@ -49,7 +49,7 @@ div.tooltip {
 
 .hidebutton {
   height: 25px;
-  width: 80px;
+  width: 6.3%;
   top: 1px;
   position: fixed;
 }
@@ -84,6 +84,11 @@ div.tooltip {
   width: 20%;
 }
 
+.third-leftpanel {
+  left: 40%;
+  width: 20%;
+}
+
 .second-rightpanel{
   right: 20%;
   width: 20%;
@@ -97,6 +102,12 @@ div.tooltip {
 
 .options-container {
   top: 0px;
+  left: 40%;
+  padding-right: 0px;
+}
+
+.filter-container {
+  top: 0px;
   left: 20%;
   padding-right: 0px;
 }
@@ -107,26 +118,39 @@ div.tooltip {
 
 </style>
 
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="jquery-1.12.4.js"></script>
+<script src="jquery-ui.js"></script>
 <script src="palette.js"></script>
 <script src="rangeslider.min.js"></script>
-
-</head>
 <!-- Load d3.js -->
 <script src="d3.v4.js"></script>
+</head>
+
 
 <!-- Create a div where the graph will take place -->
 <div class="card panel-container analysis-container border-info bg-dark" id = "leftpanel">
   <div class="card-body">
-    <div class="card border-info mb-3" style="max-width: 20rem;">
-      <div class="card-header"><h5>DATA</h5></div>
+    <div class="card border-info bg-info mb-3" style="max-width: 20rem;">
+      <div class="card-header" style="color: black;"><h5>DATA</h5></div>
       <div class="card-body">
-        <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
-        <p class="card-text">CONTENT</p>
+        <div class="form-group">
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input bg-info" id="inputGroupFile02">
+                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
-    <div class="card border-info mb-3" style="max-width: 20rem;">
+  </div>
+</div>
+
+
+<!--OPTIONS PANEL -->
+<div class="card panel-container filter-container border-success bg-dark" id = "fpanel">
+  <div class="card-body">
+    <div class="card border-success mb-3" style="max-width: 20rem;">
       <div class="card-header"><h5>FILTERS</h5></div>
       <div class="card-body">
         <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
@@ -180,7 +204,7 @@ div.tooltip {
 
 <div class="stats-container card border-warning mb-3 bg-dark panel-container first-rightpanel" id = "rightpanel">
   <div class="card-body">
-    <div class="card border-warning mb-3" style="max-width: 20rem;">
+    <div class="card border-warning bg-warning mb-3" style="color: black; max-width: 20rem;">
       <div class="card-header"><h5 id ="nodename">NODE</h5></div>
       <div class="card-body">
         <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
@@ -194,7 +218,7 @@ div.tooltip {
         <p class="card-text">Some</p>
       </div>
     </div>
-    <div class="card border-warning mb-3" style="max-width: 20rem;">
+    <div class="card border-warning  mb-3" style="max-width: 20rem;">
       <div class="card-header">Articles</div>
       <div class="card-body">
         <!--<h4 class="card-title">Primary card title</h4>-->
@@ -266,7 +290,7 @@ div.tooltip {
 <!--- --->
 <div class="stats-container card border-danger mb-3 bg-dark panel-container second-rightpanel" id = "panelgraph">
   <div class="card-body">
-    <div class="card border-danger mb-3" style="max-width: 20rem;">
+    <div class="card border-danger bg-danger mb-3" style="max-width: 20rem;">
       <div class="card-header"><h5>GRAPH</h5></div>
       <div class="card-body">
         <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
@@ -341,11 +365,13 @@ div.tooltip {
   </div>
 </div>
 
-<button class="hidebutton first-leftpanel card border-info bg-info" style="font-size: 20px; width: 80px;" id = "datapanel"><b>D↳</b></button>
-<button class="hidebutton second-leftpanel card border-light bg-light" style="font-size: 20px; width: 80px;" id = "optionpanel"><b>O↳</b></button>
+<button class="hidebutton first-leftpanel card border-info bg-info" style="font-size: 20px; width: 6.3%;" id = "datapanel"><b>D↳</b></button>
+<button class="hidebutton third-leftpanel card border-light bg-light" style="font-size: 20px; width: 6.3%;" id = "optionpanel"><b>O↳</b></button>
+<button class="hidebutton second-leftpanel card border-success bg-success" style="font-size: 20px; width: 6.3%;" id = "filterpanel"><b>F↳</b></button>
 
-<button class="hidebutton card border-danger bg-danger second-rightpanel" style="font-size: 20px; width: 80px;" id = "graphpanel"><b>↲G</b></button>
-<button class="hidebutton card border-warning bg-warning first-rightpanel" style="font-size: 20px; width: 80px;" id = "nodepanel"><b>↲N</b></button>
+
+<button class="hidebutton card border-danger bg-danger second-rightpanel" style="font-size: 20px; width: 6.3%;" id = "graphpanel"><b>↲G</b></button>
+<button class="hidebutton card border-warning bg-warning first-rightpanel" style="font-size: 20px; width: 6.3%;" id = "nodepanel"><b>↲N</b></button>
 
 <div id="my_dataviz" style="text-align: center; height: 100vh;"></div>
 
