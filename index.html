@@ -62,7 +62,16 @@ div.tooltip {
   padding-top: 25px;
   opacity: 0.95;
   overflow-y: scroll;
+
+  /* Hide scrollbars */
+  scrollbar-width: none !important;
+  overflow: -moz-scrollbars-none  !important;
+  -ms-overflow-style: none  !important;
 }
+
+/*Hide scrollbars*/
+.panel-container::-webkit-scrollbar { width: 0 !important }
+
 
 .stats-container {
   top: 0px;
