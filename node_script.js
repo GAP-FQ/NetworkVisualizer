@@ -2,7 +2,6 @@
 //https://gist.github.com/steveharoz/8c3e2524079a8c440df60c1ab72b5d03#file-code-js
 //http://pablobarbera.com/big-data-upf/html/02b-networks-descriptive-analysis.html
 //https://bl.ocks.org/steveharoz/raw/8c3e2524079a8c440df60c1ab72b5d03/
-//Access-Control-Allow-Origin: *
 //Variables
 var node_size = 150;
 var link_size = 1;

@@ -206,19 +206,18 @@ $(document).ready(function(){
     }
   });
 
-  //Read data
+  //OPTIONS PANEL
+  //---------------------------------------------------------------
   $("#inputStrength").change(function(){
     forceProperties.charge.strength = this.value;
     updateAll();
   });
 
-  //Read data
   $("#inputNodeSize").change(function(){
     node_size = this.value;
     updateAll();
   });
 
-  //Read data
   $("#inputLinkSize").change(function(){
     link_size = this.value;
     updateAll();
@@ -233,7 +232,6 @@ $(document).ready(function(){
     forceProperties.center.y = this.value;
     updateAll();
   });
-
 
   $("#inputDistanceMin").change(function(){
     forceProperties.charge.distanceMin = this.value;
@@ -294,6 +292,14 @@ $(document).ready(function(){
 
     updateAll();
 
+  })
+
+  //---------------------------------------------------------------
+
+  //TOOLTIPS FOR INFORMATION ON MEASURES FOR GPANEL
+  //---------------------------------------------------------------
+  $("#highest-degree-nodes").on("mouseover", function(){
+    
   })
 
   //Hide on start
