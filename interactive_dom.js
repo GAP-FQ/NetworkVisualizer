@@ -296,11 +296,6 @@ $(document).ready(function(){
 
   //---------------------------------------------------------------
 
-  //TOOLTIPS FOR INFORMATION ON MEASURES FOR GPANEL
-  //---------------------------------------------------------------
-  $("#highest-degree-nodes").on("mouseover", function(){
-    
-  })
 
   //Hide on start
   $("#filterpanel").trigger( "click" );
