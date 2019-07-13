@@ -12,14 +12,14 @@ var selected_links = [];
 var selected_color = "orange";
 var selected_size = 7;
 var node_border_size = 0.5
-var database = "data1.json";
-var typename = "gender";
-var colorname = "depto";
+var database = "profesores_v1.json";
+var typename = "Sex";
+var colorname = "Department";
 var sizename = "pubs";
 var uniquetype = ["M","F","O"];
-var uniquecolor = ["Química teórica", "Baterías de flujo","Química práctica",
-"Química cuántica","Química de alimentos"];
-
+var uniquecolor = ['IQ', 'IM', 'BQ', 'QO', 'AyB', 'FyQT', 'BIO', 'QAN', 'QIyN',
+                   'FQ','FARM', 'SISAL', 'USAI', 'MAT', 'PTC'];
+var scaletype = "linear" //"log"
 
 //Additional functions
 function onlyUnique(value, index, self) {
@@ -202,7 +202,7 @@ function initializeDisplay() {
       .selectAll("line")
       .data(graph.links)
       .enter().append("line")
-      .attr("stroke-width", function(d) { return (link_size*d.colabs); })
+      .attr("stroke-width", function(d) { return (link_size*d.Collaborations); })
       .style("stroke", linkcolor)
       .on("click", function(d) {
         SelectDeselect(selected_nodes, selected_links, this, true);
@@ -248,7 +248,12 @@ node = inner.append("g")
 
 for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
   d3.selectAll("." + uniquetype[i]).append("path")
-    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*Math.log(d.pubs + 2)}))
+    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){
+      if (scaletype == "linear") {
+        return node_size*d.Collaborations;
+      } else if (scaletype == "log") {
+        return node_size*Math.log(d.Collaborations + 2);
+      }}))
     .attr("class", "vertices" + i);
 }
 
@@ -286,10 +291,10 @@ function ticked() {
 function updateDisplay() {
   for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
     d3.selectAll(".vertices" + i)
-      .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*Math.log(d.pubs + 2)}));
+      .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*d.Collaborations}));
   }
   d3.selectAll("line")
-  .attr("stroke-width", function(d) { return (link_size*d.colabs); })
+  .attr("stroke-width", function(d) { return (link_size*d.Collaborations); })
 }
 //TODO FIXME
 
@@ -324,8 +329,8 @@ function show_tooltip_link(d, mydiv, mybool) {
       .duration(200)
       .style("opacity", .95);
 
-  var content = d.colabs + " publicaciones";
-  var thename =  d.sourcename  + "-" + d.targetname;
+  var content = d.art_id + " publicaciones";
+  var thename =  d.art_id  + "-" + d.art_id;
 
   //Add card header
   mydiv.html("<div class='card-header'><h5>" +  thename + "</h5></div>" +
@@ -350,12 +355,14 @@ function show_tooltip_node(d, mydiv, clicked) {
       .style("opacity", .95);
 
   var content = "<p class='card-text'>" +
-    "<i>" + d.depto + "</i>" + "<br/>" +
-    "Publicaciones " + d.pubs + "</p>";
-  var thename = d.name;
+    "<i>" +  d.Department + "</i>" + "<br/>" +
+     d.Position + "<br/>" +
+     d.Email + "<br/>" +
+    "Colaboraciones: " + d.Collaborations + "</p>";
+  var thename = d.Name + " " + d.LastName1 + " " + d.LastName2;
 
   //Add card header
-  mydiv.html("<div class='card-header'><h5>" + d.name + "</h5></div>" +
+  mydiv.html("<div class='card-header'><h5>" + thename + "</h5></div>" +
   "<div class = 'card-body'>" + content + "</div>")
       .style("left", (d3.event.pageX) + "px")
       .style("top", (d3.event.pageY - 28) + "px");
