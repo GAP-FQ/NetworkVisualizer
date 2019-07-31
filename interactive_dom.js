@@ -303,6 +303,8 @@ $(document).ready(function(){
   $("#nodepanel").trigger( "click" );
   $("#optionpanel").trigger( "click" );
 
+  //Add loading message on start
+  //LoadingMessage()
 
 
 

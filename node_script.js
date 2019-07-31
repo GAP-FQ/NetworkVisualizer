@@ -20,6 +20,7 @@ var uniquetype = ["M","F","O"];
 var uniquecolor = ['IQ', 'IM', 'BQ', 'QO', 'AyB', 'FyQT', 'BIO', 'QAN', 'QIyN',
                    'FQ','FARM', 'SISAL', 'USAI', 'MAT', 'PTC'];
 var scaletype = "linear" //"log"
+var loading_hidden = false;
 
 //Additional functions
 function onlyUnique(value, index, self) {
@@ -218,65 +219,65 @@ function initializeDisplay() {
         return hide_tooltip(div2);});
 
 
-node = inner.append("g")
-    .attr("class", "nodes")
-    .selectAll(".node")
-    .data(graph.nodes)
-    .enter().append("g")
-    .style("stroke", "white").style("stroke-width", node_border_size)
-    .attr("class", function(d) {
-      return d[typename].replace(/\s/g,'') + " node" + " " + d[colorname].replace(/\s/g,'');
-    })
-    .on("mouseover", function(d) {
-          d3.select(this).style("stroke-width", selected_size).style("stroke",selected_color);
-          return show_tooltip_node(d, div, false);
-        })
-    .on("click", function(d) {
-      SelectDeselect(selected_links, selected_nodes, this, false)
-      return show_tooltip_node(d, div, true);
-    })
-    .on("mouseout", function(d) {
-      if (!selected_nodes.includes(this)){
-        d3.select(this).style("stroke-width", node_border_size).style("stroke",linkcolor);
-      }
-      hide_tooltip(div);
-    })
-    .call(d3.drag()
-       .on("start", dragstarted)
-       .on("drag", dragged)
-       .on("end", dragended));
+  node = inner.append("g")
+      .attr("class", "nodes")
+      .selectAll(".node")
+      .data(graph.nodes)
+      .enter().append("g")
+      .style("stroke", "white").style("stroke-width", node_border_size)
+      .attr("class", function(d) {
+        return d[typename].replace(/\s/g,'') + " node" + " " + d[colorname].replace(/\s/g,'');
+      })
+      .on("mouseover", function(d) {
+            d3.select(this).style("stroke-width", selected_size).style("stroke",selected_color);
+            return show_tooltip_node(d, div, false);
+          })
+      .on("click", function(d) {
+        SelectDeselect(selected_links, selected_nodes, this, false)
+        return show_tooltip_node(d, div, true);
+      })
+      .on("mouseout", function(d) {
+        if (!selected_nodes.includes(this)){
+          d3.select(this).style("stroke-width", node_border_size).style("stroke",linkcolor);
+        }
+        hide_tooltip(div);
+      })
+      .call(d3.drag()
+         .on("start", dragstarted)
+         .on("drag", dragged)
+         .on("end", dragended));
 
-for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
-  d3.selectAll("." + uniquetype[i]).append("path")
-    .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){
-      if (scaletype == "linear") {
-        return node_size*d.Collaborations;
-      } else if (scaletype == "log") {
-        return node_size*Math.log(d.Collaborations + 2);
-      }}))
-    .attr("class", "vertices" + i);
-}
+  for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++){
+    d3.selectAll("." + uniquetype[i]).append("path")
+      .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){
+        if (scaletype == "linear") {
+          return node_size*d.Collaborations;
+        } else if (scaletype == "log") {
+          return node_size*Math.log(d.Collaborations + 2);
+        }}))
+      .attr("class", "vertices" + i);
+  }
 
-for (var i = 0; i < uniquecolor.length; i++){
-  d3.selectAll("." + uniquecolor[i].replace(/\s/g,'')).style("fill",  "#" + mycolors[i]);
-}
+  for (var i = 0; i < uniquecolor.length; i++){
+    d3.selectAll("." + uniquecolor[i].replace(/\s/g,'')).style("fill",  "#" + mycolors[i]);
+  }
 
-}
+  }
 
-d3.json(database, function(error, _graph) {
-  if (error) throw error;
-  graph = _graph;
-  initializeDisplay();
-  initializeSimulation();
+  d3.json(database, function(error, _graph) {
+    if (error) throw error;
+    graph = _graph;
+    initializeDisplay();
+    initializeSimulation();
 
-  simulation.force("link")
-      .links(graph.links);
+    simulation.force("link")
+        .links(graph.links);
 });
 
 // update the display positions after each simulation tick
 function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
+
+    link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
@@ -284,6 +285,17 @@ function ticked() {
     node.attr("transform", function (d) {
           return "translate(" + d.x + "," + d.y + ")";
       });
+
+    alpha_value.innerHTML = "Cargando " + (100 - Math.round(simulation.alpha()*100)) + '%';
+
+    if (simulation.alpha() < 0.05 & !loading_hidden){
+      $("#loading").slideToggle();
+      loading_hidden = !loading_hidden;
+    } else if (simulation.alpha() > 0.5 & loading_hidden) {
+      $("#loading").slideToggle();
+      loading_hidden = !loading_hidden;
+    }
+
 
 }
 
@@ -294,7 +306,8 @@ function updateDisplay() {
       .attr("d",  d3.symbol().type(d3symbols[i]).size(function(d){return node_size*d.Collaborations}));
   }
   d3.selectAll("line")
-  .attr("stroke-width", function(d) { return (link_size*d.Collaborations); })
+  .attr("stroke-width", function(d) { return (link_size*d.Collaborations); });
+
 }
 //TODO FIXME
 
@@ -304,6 +317,7 @@ function updateAll() {
     updateForces();
     updateDisplay();
 }
+
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();

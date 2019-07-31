@@ -1,10 +1,10 @@
-a<!DOCTYPE html>
+<!DOCTYPE html>
 <!-- FROM: https://www.d3-graph-gallery.com/graph/network_basic.html -->
 <meta charset="utf-8">
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-<meta name='description' content='Awesome plot'>
-<meta name='author' content='Rodrigo Zepeda Tello'>
+<meta name='description' content='Network visualizer'>
+<meta name='author' content='Rodrigo Zepeda Tello & Karl García Ruiz'>
 <head>
 <link rel="stylesheet" href="bootstrap.min.css">
 <style> /* set the CSS */
@@ -154,6 +154,18 @@ div.tooltip {
    width:100%;
 }
 
+.loading-card{
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  top: 0%;
+  position: fixed;
+  z-index: 99;
+  text-align: center;
+  display: block;
+  font-size: 500%;
+}
+
 </style>
 
 <script src="jquery-1.12.4.js"></script>
@@ -164,8 +176,13 @@ div.tooltip {
 <script src="d3.v4.js"></script>
 </head>
 
+<body>
 
-<!-- Create a div where the graph will take place -->
+  <!-- LOADING SCREEN-->
+  <div id="loading" class = "card border-dark bg-dark loading-card"><p id="alpha_value"></p></div>
+
+
+<!-- INFORMATION PANEL -->
 <div class="card panel-container analysis-container border-info bg-dark" id = "leftpanel">
   <div class="card-body">
     <div class="card border-info bg-info mb-3" style="max-width: 20rem;">
@@ -185,7 +202,7 @@ div.tooltip {
 </div>
 
 
-<!--OPTIONS PANEL -->
+<!--FILTER PANEL -->
 <div class="card panel-container filter-container border-success bg-dark" id = "fpanel">
   <div class="card-body">
     <div class="card border-success mb-3" style="max-width: 20rem;">
@@ -240,6 +257,7 @@ div.tooltip {
   </div>
 </div>
 
+<!-- NODE PANEL -->
 <div class="stats-container card border-warning mb-3 bg-dark panel-container first-rightpanel" id = "rightpanel">
   <div class="card-body">
     <div class="card border-warning bg-warning mb-3" style="color: black; max-width: 20rem;">
@@ -330,7 +348,7 @@ div.tooltip {
   </div>
 </div>
 
-<!--- --->
+<!--- GRAPH PANEL --->
 <div class="stats-container card border-danger mb-3 bg-dark panel-container second-rightpanel" id = "panelgraph">
   <div class="card-body">
     <div class="card border-danger bg-danger mb-3" style="max-width: 20rem;">
@@ -416,15 +434,20 @@ div.tooltip {
   </div>
 </div>
 
+<!-- BUTTONS FOR PANELS -->
 <button class="hidebutton first-leftpanel card border-info bg-info" style="font-size: 20px; width: 6.3%;" id = "datapanel"><b>D↳</b></button>
 <button class="hidebutton third-leftpanel card border-light bg-light" style="font-size: 20px; width: 6.3%;" id = "optionpanel"><b>O↳</b></button>
 <button class="hidebutton second-leftpanel card border-success bg-success" style="font-size: 20px; width: 6.3%;" id = "filterpanel"><b>F↳</b></button>
-
-
 <button class="hidebutton card border-danger bg-danger second-rightpanel" style="font-size: 20px; width: 6.3%;" id = "graphpanel"><b>↲G</b></button>
 <button class="hidebutton card border-warning bg-warning first-rightpanel" style="font-size: 20px; width: 6.3%;" id = "nodepanel"><b>↲N</b></button>
 
+<!-- CANVAS -->
 <div id="my_dataviz" style="text-align: center; height: 100vh;"></div>
+
 
 <script src="node_script.js"></script>
 <script src="interactive_dom.js"></script>
+
+
+
+</body>
