@@ -262,46 +262,46 @@ div.tooltip {
 <div class="stats-container card border-warning mb-3 bg-dark panel-container first-rightpanel" id = "rightpanel">
   <div class="card-body">
     <div class="card border-warning bg-warning mb-3" style="color: black; max-width: 20rem;">
-      <div class="card-header"><h5 id ="nodename">NODE</h5></div>
+      <div class="card-header"><h5 id ="nodename">NODOS</h5></div>
       <div class="card-body">
         <p class="card-text" id="nodep">CONTENT</p>
       </div>
     </div>
     <div class="card border-warning mb-3" style="max-width: 20rem;"
-      tooltip="Nodes linked to main node" tooltip-persistent>
-      <div class="card-header">Collaborators</div>
+      tooltip="Profesores de Tiempo Completo (PTC) y Técnicos Académicos (TA)." tooltip-persistent>
+      <div class="card-header">Colaboradores</div>
       <div class="card-body">
         <p class="card-text">Some</p>
       </div>
     </div>
     <div class="card border-warning  mb-3" style="max-width: 20rem;"
-      tooltip="Links by main node" tooltip-persistent>
-      <div class="card-header">Articles</div>
+      tooltip="Artículos (únicamente) de los colaboradores." tooltip-persistent>
+      <div class="card-header">Artículos</div>
       <div class="card-body">
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
     </div>
     <div class="card border-warning mb-3" style="max-width: 20rem;">
-      <div class="card-header">Statistics</div>
+      <div class="card-header">Estadísticos</div>
         <div class="card-body container-fluid">
           <div class="row">
             <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-              tooltip="Page-rank represents" tooltip-persistent>
+              tooltip="Aproxima la probabilidad de que dos nodos se conecten entre sí." tooltip-persistent>
               <div class="card-header"><small>Page-Rank</small></div>
               <div class="card-body">
                 <p class="card-text">Some quick example.</p>
               </div>
             </div>
             <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-              tooltip="Centrality represents" tooltip-persistent>
-              <div class="card-header"><small>Centrality</small></div>
+              tooltip="Mide la conectividad entre académicos influyentes, qué tanto colaboran aquellos con mayor grado." tooltip-persistent>
+              <div class="card-header"><small>Centralidad</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
               </div>
             </div>
             <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-              tooltip="Betweenness represents" tooltip-persistent>
+              tooltip="Es (aproximadamente) el número de rutas más cortas entre nodos que pasan a través de un nodo en particular" tooltip-persistent>
               <div class="card-header"><small>Betweenness</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
@@ -309,8 +309,8 @@ div.tooltip {
               </div>
             </div>
             <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-              tooltip="Closeness represents" tooltip-persistent>
-              <div class="card-header"><small>Closeness</small></div>
+              tooltip="Es una medida de la centralidad de un nodo: el grado de colaboración (a mayores valores menor la colaboración, ya que significa un mayor aislamiento)" tooltip-persistent>
+              <div class="card-header"><small>Cercanía</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -319,15 +319,15 @@ div.tooltip {
           </div>
           <div class="row">
             <div class="card border-warning mb  col-xs-5" style="width: 45%; height: 10%; margin-right: 2%; margin-left: 2.5%;"
-              tooltip="Degree represents the number of links coming from the node" tooltip-persistent>
-              <div class="card-header"><small>Degree</small></div>
+              tooltip="Número de aristas por nodo (número de colaboraciones por académico, también considerada como la influencia de cada autor en la red)." tooltip-persistent>
+              <div class="card-header"><small>Grado</small></div>
               <div class="card-body">
                 <p class="card-text">Some quick example.</p>
               </div>
             </div>
             <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-              tooltip="Strength represents " tooltip-persistent>
-              <div class="card-header"><small>Strength</small></div>
+              tooltip="Es una medida ponderada del grado. Esta se ve reflejada en el grueso de la arista." tooltip-persistent>
+              <div class="card-header"><small>Fuerza</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -336,8 +336,8 @@ div.tooltip {
           </div>
           <div class="row">
             <div class="card border-warning mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The Authority score represents " tooltip-persistent>
-              <div class="card-header"><small>Authority score</small></div>
+            tooltip="Mide la centralidad de un nodo desde el punto de vista de a cuántos nodos está conectado un nodo en particular tales que dichos nodos tengan un grado alto." tooltip-persistent>
+              <div class="card-header"><small>Calificación de centralidad</small></div>
               <div class="card-body">
                 <!--<h4 class="card-title">Primary card title</h4>-->
                 <p class="card-text">Some quick example.</p>
@@ -360,79 +360,67 @@ div.tooltip {
       </div>
     </div>
     <div class="card border-danger mb-3" id = "highest-degree-nodes" style="max-width: 20rem;"
-        tooltip="The highest degree node represents the node with the most edges." tooltip-persistent>
-      <div class="card-header">Highest degree nodes</div>
+        tooltip="Nodos con mayor cantidad de conexiones distintas sin considerar fuerza (cantidad de colaboraciones) de la misma conexión." tooltip-persistent>
+      <div class="card-header">Nodos de más alto grado</div>
       <div class="card-body">
-        <!--<h4 class="card-title">Collaborators</h4-->
         <p class="card-text">Some</p>
       </div>
     </div>
     <div class="card border-danger mb-3" style="max-width: 20rem;"
-    tooltip="The highest weighted link represents the link with most weight." tooltip-persistent>
-      <div class="card-header">Highest weighted links</div>
+    tooltip="Aristas con mayor grosor (número de colaboraciones entre dos académicos en particular)." tooltip-persistent>
+      <div class="card-header">Vínculos de mayor ponderación</div>
       <div class="card-body">
-        <!--<h4 class="card-title">Primary card title</h4>-->
         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
     </div>
     <div class="card border-danger mb-3" style="max-width: 20rem;">
-      <div class="card-header">Statistics</div>
+      <div class="card-header">Estadísticos</div>
       <div class="card-body container-fluid">
         <div class="row">
           <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The average distance" tooltip-persistent>
-            <div class="card-header"><small>Distance</small></div>
+            tooltip="Promedio de aristas entre dos nodos (es una medida del tamaño de la red)" tooltip-persistent>
+            <div class="card-header"><small>Distancia</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
           <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The diameter of graph is" tooltip-persistent>
-            <div class="card-header"><small>Diameter</small></div>
+            tooltip="Es la distancia más larga, en número de aristas, entre dos nodos (es una medida del tamaño de la red)." tooltip-persistent>
+            <div class="card-header"><small>Diámetro</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
           <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The density represents" tooltip-persistent>
-            <div class="card-header"><small>Edge density</small></div>
+            tooltip="Es la razón entre el número de aristas de la red contra el total de aristas posibles en la misma (pensando en un grafo completo)." tooltip-persistent>
+            <div class="card-header"><small>Densidad</small></div>
             <div class="card-body">
               <!--<h4 class="card-title">Primary card title</h4>-->
               <p class="card-text">Some quick example.</p>
             </div>
           </div>
-            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The reciprocity represents" tooltip-persistent>
-              <div class="card-header"><small>Reciprocity</small></div>
-              <div class="card-body">
-                <!--<h4 class="card-title">Primary card title</h4>-->
-                <p class="card-text">Some quick example.</p>
-              </div>
+          <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+          tooltip=" Probabilidad de que nodos adyacentes estén conectados entre sí (también se le conoce como coeficiente de agrupamiento)." tooltip-persistent>
+            <div class="card-header"><small>Transitividad</small></div>
+            <div class="card-body">
+              <!--<h4 class="card-title">Primary card title</h4>-->
+              <p class="card-text">Some quick example.</p>
             </div>
           </div>
-          <div class="row">
-            <div class="card border-danger mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;"
-            tooltip="The transitivity represents" tooltip-persistent>
-              <div class="card-header"><small>Transitivity</small></div>
-              <div class="card-body">
-                <!--<h4 class="card-title">Primary card title</h4>-->
-                <p class="card-text">Some quick example.</p>
-              </div>
-            </div>
-          </div>
-      </div>
-    </div>
-    <div class="card border-danger mb-3" style="max-width: 20rem;"
-    tooltip="The coreness represents" tooltip-persistent>
-      <div class="card-header">Coreness</div>
-      <div class="card-body">
-        <!--<h4 class="card-title">Primary card title</h4>-->
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-      </div>
+        </div>
     </div>
   </div>
+  <div class="card border-danger mb-3" style="max-width: 20rem;"
+  tooltip="Las redes se subdividen en comunidades de nodos con diferentes densidades de aristas (densidad de conexiones)." tooltip-persistent>
+    <div class="card-header">Capas de comunidad (coreness)</div>
+    <div class="card-body">
+      <!--<h4 class="card-title">Primary card title</h4>-->
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- BUTTONS FOR PANELS -->
