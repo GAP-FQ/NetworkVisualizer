@@ -289,10 +289,10 @@ function ticked() {
     alpha_value.innerHTML = "Cargando " + (100 - Math.round(simulation.alpha()*100)) + '%';
 
     if (simulation.alpha() < 0.05 & !loading_hidden){
-      $("#loading").slideToggle();
+      $("#loading").fadeOut();
       loading_hidden = !loading_hidden;
-    } else if (simulation.alpha() > 0.5 & loading_hidden) {
-      $("#loading").slideToggle();
+    } else if (simulation.alpha() > 0.8 & loading_hidden) {
+      $("#loading").fadeIn();
       loading_hidden = !loading_hidden;
     }
 
