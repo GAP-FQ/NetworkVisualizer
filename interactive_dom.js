@@ -25,20 +25,7 @@ $(document).ready(function() {
       return false;
   });
 
-  //Selected sex change class appear disappear
-  //TODO: check that also is in department selected
-  $("#selectsex").change(function() {
-    var miseleccion = $(this).children("option:selected").val();
-
-
-
-  })
-
-   $("#selectdept").change(function() {
-     var miseleccion = $(this).val();
-     alert(miseleccion)
-   })
-
+  
   //STarting values
   $("#inputNodeSize").val(node_size);
   $("#inputLinkSize").val(link_size);
