@@ -389,7 +389,7 @@ function show_tooltip_link(d, mydiv, mybool) {
   //Add link header
   //$("#linkornode").text("LINK")
   //Add node Header
-  if (mybool) {
+  if (false) { //if (bool)
     $("#nodename").text(thename.toUpperCase());
     $("#nodep").html(content);
   };
