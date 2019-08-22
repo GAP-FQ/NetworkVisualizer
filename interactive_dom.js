@@ -442,7 +442,7 @@ $(document).ready(function() {
 
 
   //Hide on start
-  $("#filterpanel").trigger("click");
+  $("#infopanel").trigger("click");
   $("#graphpanel").trigger("click");
   $("#nodepanel").trigger("click");
   $("#optionpanel").trigger("click");
