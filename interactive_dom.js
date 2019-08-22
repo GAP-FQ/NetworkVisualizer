@@ -5,7 +5,7 @@ var opanel = true;
 
 $(document).ready(function() {
 
-  
+
   $('#selectdept option').prop('selected', true);
   $('#selectsex option').prop('selected', true);
 
@@ -17,13 +17,29 @@ $(document).ready(function() {
       var misexo    = $("#selectsex").val();
 
       //Loop through se and dept
-      for(mydept of uniquecolor){
-        for (mytype of uniquetype){
-          if (misexo.includes(mytype) && misdeptos.includes(mydept)){
-            d3.selectAll("." + mytype + "." + mydept).attr("visibility", "visible");
-          } else {
-            d3.selectAll("." + mytype + "." + mydept).attr("visibility", "hidden");
-          }
+      if (misexo == null){
+        d3.selectAll(".node,.link").attr("visibility","hidden");
+      } else if (misdeptos == null){
+        d3.selectAll(".node,.link").attr("visibility","hidden");
+      } else {
+        var deptoclass = "." + misdeptos.join(",.")
+        var sexoclass  = "." + misexo.join(",.")
+
+        let hiddendept = "." + misdeptos
+                 .filter(x => !uniquecolor.includes(x))
+                 .concat(uniquecolor.filter(x => !misdeptos.includes(x)))
+                 .join(",.");
+        let hiddensex = "." + misexo
+                 .filter(x => !uniquetype.includes(x))
+                 .concat(uniquetype.filter(x => !misexo.includes(x)))
+                 .join(",.");
+
+        d3.selectAll(deptoclass + sexoclass).attr("visibility","visible")
+        if (hiddendept != "."){
+          d3.selectAll(hiddendept).attr("visibility","hidden")
+        }
+        if (hiddensex != "."){
+          d3.selectAll(hiddensex).attr("visibility","hidden")
         }
       }
       return false;

@@ -16,7 +16,7 @@ var database = "profesores_v1.json";
 var typename = "Sex";
 var colorname = "Department";
 var sizename = "pubs";
-var uniquetype = ["M", "F", "O"];
+var uniquetype = ["M", "F"];
 var uniquecolor = ['IQ', 'IM', 'BQ', 'QO', 'AyB', 'FyQT', 'BIO', 'QAN', 'QIyN',
   'FQ', 'FARM', 'SISAL', 'USAI', 'MAT', 'PTC'];
 var scaletype = "linear" //"log"
@@ -215,7 +215,11 @@ function initializeDisplay() {
   link = inner.append("g")
     .selectAll("line")
     .data(graph.links)
-    .enter().append("line")
+    .enter()
+    .append("line")
+    .attr("class", function(d) {
+      return d[typename] + " link" + " " + d[colorname];
+    })
     .attr("stroke-width", function(d) {
       return (link_size * d.Collaborations);
     })
