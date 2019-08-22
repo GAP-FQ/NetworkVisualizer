@@ -5,6 +5,10 @@ var opanel = true;
 
 $(document).ready(function() {
 
+  
+  $('#selectdept option').prop('selected', true);
+  $('#selectsex option').prop('selected', true);
+
   //https://stackoverflow.com/questions/8641729/how-to-avoid-the-need-for-ctrl-click-in-a-multi-select-box-using-javascript
   $('option').mousedown(function(e) {
       e.preventDefault();
@@ -25,7 +29,7 @@ $(document).ready(function() {
       return false;
   });
 
-  
+
   //STarting values
   $("#inputNodeSize").val(node_size);
   $("#inputLinkSize").val(link_size);
