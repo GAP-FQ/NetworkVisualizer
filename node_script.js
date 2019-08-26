@@ -221,7 +221,7 @@ function initializeDisplay() {
       return d[typename] + " link" + " " + d[colorname];
     })
     .attr("stroke-width", function(d) {
-      console.log(d.Collaborations)
+      //console.log(d.Collaborations)
       return link_size * d.Collaborations;
     })
     .style("stroke", linkcolor)
@@ -273,9 +273,9 @@ function initializeDisplay() {
     d3.selectAll("." + uniquetype[i]).append("path")
       .attr("d", d3.symbol().type(d3symbols[i]).size(function(d) {
         if (scaletype == "linear") {
-          return node_size * d.Collaborations;
+          return node_size * d.Number_of_articles;
         } else if (scaletype == "log") {
-          return node_size * Math.log(d.Collaborations + 2);
+          return node_size * Math.log(d.Number_of_articles + 2);
         }
       }))
       .attr("class", "vertices" + i);
@@ -335,7 +335,7 @@ function updateDisplay() {
   for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++) {
     d3.selectAll(".vertices" + i)
       .attr("d", d3.symbol().type(d3symbols[i]).size(function(d) {
-        return node_size * d.Collaborations
+        return node_size * d.Number_of_articles
       }));
   }
   d3.selectAll("line")
@@ -407,7 +407,8 @@ function show_tooltip_node(d, mydiv, clicked) {
     "<i>" + d.Department + "</i>" + "<br/>" +
     d.Position + "<br/>" +
     d.Email + "<br/>" +
-    "Colaboraciones: " + d.Collaborations + "</p>";
+    "Artículos:" + d.Number_of_articles + "<br/>" +
+    "Colaboradores: " + d.Collaborations + "</p>";
   var thename = d.Name + " " + d.LastName1 + " " + d.LastName2;
 
   //Add card header
