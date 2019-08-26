@@ -221,7 +221,8 @@ function initializeDisplay() {
       return d[typename] + " link" + " " + d[colorname];
     })
     .attr("stroke-width", function(d) {
-      return link_size;//(link_size * d.Collaborations);
+      console.log(d.Collaborations)
+      return link_size * d.Collaborations;
     })
     .style("stroke", linkcolor)
     .on("click", function(d) {
@@ -339,7 +340,7 @@ function updateDisplay() {
   }
   d3.selectAll("line")
     .attr("stroke-width", function(d) {
-      return link_size;//(link_size * d.Collaborations);
+      return link_size * d.Collaborations;
     });
 
 }
