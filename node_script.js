@@ -378,7 +378,7 @@ function show_tooltip_link(d, mydiv, mybool) {
     .style("opacity", .95);
 
   var content = d.articlesbycouple + " publicaciones conjuntas";
-  var thename = d.source + "-" + d.target;
+  var thename = d.source_name + "-" + d.target_name;
 
   //Add card header
   mydiv.html("<div class='card-header'><h5>" + thename + "</h5></div>" +
