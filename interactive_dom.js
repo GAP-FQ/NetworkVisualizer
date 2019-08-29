@@ -28,18 +28,20 @@ $(document).ready(function() {
       }
 
       //Loop through se and dept
-      if (misexo == null){
+      if (misexo == null & !todos){
         d3.selectAll(".node,.link").attr("visibility","hidden");
-      } else if (misdeptos == null){
+      } else if (misdeptos == null & !todos){
         d3.selectAll(".node,.link").attr("visibility","hidden");
       } else if (todos){
         d3.selectAll(".node,.link").attr("visibility","visible");
         $('#selectdept option').prop('selected', true);
         $("#selectdept option:eq(0)").prop('selected',false)
         $("#selectdept option:eq(1)").prop('selected',false) //NINGUNO
+        $('#selectsex option').prop('selected', true);
       } else if (ninguno){
         d3.selectAll(".node,.link").attr("visibility","hidden");
         $('#selectdept option').prop('selected', false);
+        $('#selectsex option').prop('selected', false);
       } else {
         var deptoclass = "." + misdeptos.join(",.")
         var sexoclass  = "." + misexo.join(",.")
