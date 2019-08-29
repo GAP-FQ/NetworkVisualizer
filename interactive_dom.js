@@ -8,6 +8,8 @@ $(document).ready(function() {
 
   $('#selectdept option').prop('selected', true);
   $('#selectsex option').prop('selected', true);
+  $("#selectdept option:eq(0)").prop('selected',false) //TODOS
+  $("#selectdept option:eq(1)").prop('selected',false) //NINGUNO
 
   //https://stackoverflow.com/questions/8641729/how-to-avoid-the-need-for-ctrl-click-in-a-multi-select-box-using-javascript
   $('option').mousedown(function(e) {
@@ -15,12 +17,29 @@ $(document).ready(function() {
       $(this).prop('selected', !$(this).prop('selected'));
       var misdeptos = $("#selectdept").val();
       var misexo    = $("#selectsex").val();
+      var todos     = misdeptos.includes("[TODOS]")
+      var ninguno   = misdeptos.includes("[NINGUNO]")
+      if (todos){
+        misdeptos.splice(misdeptos.indexOf("[TODOS]"), 1);
+      }
+
+      if (ninguno){
+        misdeptos.splice(misdeptos.indexOf("[NINGUNO]"), 1);
+      }
 
       //Loop through se and dept
       if (misexo == null){
         d3.selectAll(".node,.link").attr("visibility","hidden");
       } else if (misdeptos == null){
         d3.selectAll(".node,.link").attr("visibility","hidden");
+      } else if (todos){
+        d3.selectAll(".node,.link").attr("visibility","visible");
+        $('#selectdept option').prop('selected', true);
+        $("#selectdept option:eq(0)").prop('selected',false)
+        $("#selectdept option:eq(1)").prop('selected',false) //NINGUNO
+      } else if (ninguno){
+        d3.selectAll(".node,.link").attr("visibility","hidden");
+        $('#selectdept option').prop('selected', false);
       } else {
         var deptoclass = "." + misdeptos.join(",.")
         var sexoclass  = "." + misexo.join(",.")
