@@ -192,12 +192,12 @@
     <div class="card-body">
       <div class="card border-info bg-info mb-3" style="max-width: 20rem; color: black;">
         <div class="card-header">
-          <h5>INFORMATION</h5>
+          <h5>INFORMACIÓN</h5>
         </div>
         <div class="card-body">
           <div class="form-group">
             <div class="input-group mb-3">
-              Base de datos de fq
+                Personal de la Facultad de Química: Profesores de Tiempo Completo, Técnicos Académicos, Profesores Eméritos
             </div>
           </div>
         </div>
@@ -211,11 +211,11 @@
     <div class="card-body">
       <div class="card border-success mb-3" style="max-width: 20rem;">
         <div class="card-header">
-          <h5>FILTERS</h5>
+          <h5>FILTROS</h5>
         </div>
         <div class="card-body">
           <div class="form-group">
-            <label for="selectsex">Sexo</label>
+            <label for="selectsex">Género</label>
             <select multiple="multiple" class="form-control" id="selectsex" size="2">
               <option selected>M</option>
               <option selected>F</option>
@@ -224,7 +224,7 @@
           </div>
           <div class="form-group">
             <label for="selectdept">Departamento</label>
-            <select multiple="multiple" class="form-control" id="selectdept" size="17">
+            <select multiple="multiple" class="form-control" id="selectdept" size="16">
               <option selected>[TODOS]</option>
               <option selected>[NINGUNO]</option>
               <option selected>IQ</option>
@@ -241,7 +241,6 @@
               <option selected>SISAL</option>
               <option selected>USAI</option>
               <option selected>MAT</option>
-              <option selected>PTC</option>
             </select>
           </div>
         </div>
@@ -254,38 +253,38 @@
     <div class="card-body">
       <div class="card border-light mb-3" style="max-width: 20rem;">
         <div class="card-header">
-          <h5>OPTIONS</h5>
+          <h5>OPCIONES</h5>
         </div>
         <div class="card-body">
           <div class="form-group">
-            <label class="col-form-label" for="inputNodeSize">Node size</label>
-            <input type="number" class="form-control" placeholder="Node size" value="150" id="inputNodeSize">
-            <label class="col-form-label" for="inputLinkSize">Link size</label>
-            <input type="number" class="form-control" placeholder="Link size" value="1" id="inputLinkSize">
-            <label class="col-form-label" for="inputStrength">Charge Strength</label>
-            <input type="number" class="form-control" placeholder="Strength" value="1000" id="inputStrength">
-            <label class="col-form-label" for="inputCollision">Collision</label>
-            <input type="number" class="form-control" placeholder="Collision" value="0.8" id="inputCollision">
-            <label class="col-form-label" for="inputLinkDistance">Link Distance</label>
-            <input type="number" class="form-control" placeholder="Link Distance" value="10" id="inputLinkDistance">
-            <label class="col-form-label" for="inputCenterX">Center X</label>
+            <label class="col-form-label" for="inputNodeSize">Tamaño de nodo</label>
+            <input type="number" class="form-control" placeholder="Tamaño de nodo" value="150" id="inputNodeSize">
+            <label class="col-form-label" for="inputLinkSize">Grosor de arista</label>
+            <input type="number" class="form-control" placeholder="Grosor de arista" value="1" id="inputLinkSize">
+            <label class="col-form-label" for="inputStrength">Carga de nodos</label>
+            <input type="number" class="form-control" placeholder="Carga de nodos" value="1000" id="inputStrength">
+            <label class="col-form-label" for="inputCollision">Colisiones</label>
+            <input type="number" class="form-control" placeholder="Colisiones" value="0.8" id="inputCollision">
+            <label class="col-form-label" for="inputLinkDistance">Longitud de arista</label>
+            <input type="number" class="form-control" placeholder="Longitud de arista" value="10" id="inputLinkDistance">
+            <label class="col-form-label" for="inputCenterX">Origen de X</label>
             <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterX"><br>
-            <label class="col-form-label" for="inputCenterY">Center Y</label>
+            <label class="col-form-label" for="inputCenterY">Origen de Y</label>
             <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterY"><br>
-            <label class="col-form-label" for="inputDistanceMin">Min charge distance</label>
-            <input type="number" class="form-control" placeholder="Charge distance min" id="inputDistanceMin">
-            <label class="col-form-label" for="inputDistanceMax">Max charge distance</label>
-            <input type="number" class="form-control" placeholder="Charge distance max" id="inputDistanceMax">
-            <label class="col-form-label" for="inputXGravity">Gravity-X Strength</label>
+            <label class="col-form-label" for="inputDistanceMin">Min distancia entre cargas</label>
+            <input type="number" class="form-control" placeholder="Min distancia entre cargas" id="inputDistanceMin">
+            <label class="col-form-label" for="inputDistanceMax">Max distancia entre cargas</label>
+            <input type="number" class="form-control" placeholder="Max distancia entre cargas" id="inputDistanceMax">
+            <label class="col-form-label" for="inputXGravity">Fuerza en X</label>
             <input type="range" min="0" max="1" step="0.01" value="0" data-orientation="horizontal" id="inputXGravity"><br>
-            <label class="col-form-label" for="inputYGravity">Gravity-Y Strength</label>
+            <label class="col-form-label" for="inputYGravity">Fuerza en Y</label>
             <input type="range" min="0" max="1" step="0.01" value="0" data-orientation="horizontal" id="inputYGravity"><br>
-            <label class="col-form-label" for="inputXGravityCoordinate">Gravity-X coordinate</label>
-            <input type="number" class="form-control" placeholder="Y Gravity" value="1000" id="inputXGravityCoordinate">
-            <label class="col-form-label" for="inputYGravityCoordinate">Gravity-Y coordinate</label>
-            <input type="number" class="form-control" placeholder="Y Gravity" value="1000" id="inputYGravityCoordinate">
+            <label class="col-form-label" for="inputXGravityCoordinate">Centro de Gravedad (X)</label>
+            <input type="number" class="form-control" placeholder="Centro de Gravedad (X)" value="1000" id="inputXGravityCoordinate">
+            <label class="col-form-label" for="inputYGravityCoordinate">Centro de Gravedad (Y)</label>
+            <input type="number" class="form-control" placeholder="Centro de Gravedad (Y)" value="1000" id="inputYGravityCoordinate">
             <div style="text-align: center; padding-top: 10px;">
-              <a href="#" class="btn btn-light" id="resetbutton">Reset</a>
+              <a href="#" class="btn btn-light" id="resetbutton">Restablecer</a>
             </div>
           </div>
         </div>
