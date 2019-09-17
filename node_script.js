@@ -3,7 +3,7 @@
 //http://pablobarbera.com/big-data-upf/html/02b-networks-descriptive-analysis.html
 //https://bl.ocks.org/steveharoz/raw/8c3e2524079a8c440df60c1ab72b5d03/
 //Variables
-var node_size = 150;
+var node_size = 50;
 var link_size = 1;
 var outercolor = "#2B3E50";
 var linkcolor = "white";
@@ -18,7 +18,7 @@ var colorname = "Department";
 var sizename = "pubs";
 var uniquetype = ["M", "F"];
 var uniquecolor = ['IQ', 'IM', 'BQ', 'QO', 'AyB', 'FyQT', 'BIO', 'QAN', 'QIyN',
-  'FQ', 'FARM', 'SISAL', 'USAI', 'MAT', 'PTC'];
+  'FQ', 'FARM', 'SISAL', 'USAI', 'MAT'];
 var scaletype = "linear" //"log"
 var loading_hidden = false;
 
