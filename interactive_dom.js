@@ -18,8 +18,11 @@ $(document).ready(function() {
 
       //https://stackoverflow.com/questions/24403732/check-if-array-is-empty-or-does-not-exist-js
       var misdeptos = $("#selectdept").val()
+      var misexo    = $("#selectsex").val();
       var todos     = false
       var ninguno   = false
+
+      //Check that a department has been selected
       if (misdeptos && misdeptos.length){
         misdeptos = misdeptos.map(function(x){return x.replace(/\s/g, '')});
         todos     = misdeptos.includes("[TODOS]");
@@ -27,7 +30,8 @@ $(document).ready(function() {
       } else if (misdeptos == null) {
         ninguno   = true;
       };
-      var misexo    = $("#selectsex").val();
+
+      //Check if all selected
       if (todos){
         misdeptos.splice(misdeptos.indexOf("[TODOS]"), 1);
       }
@@ -59,17 +63,20 @@ $(document).ready(function() {
                  .filter(x => !uniquecolor.includes(x))
                  .concat(uniquecolor.filter(x => !misdeptos.includes(x)))
                  .join(",.");
+
         let hiddensex = "." + misexo
                  .filter(x => !uniquetype.includes(x))
                  .concat(uniquetype.filter(x => !misexo.includes(x)))
                  .join(",.");
 
-        d3.selectAll(deptoclass + sexoclass).attr("visibility","visible")
-        if (hiddendept != "."){
-          d3.selectAll(hiddendept).attr("visibility","hidden")
-        }
-        if (hiddensex != "."){
-          d3.selectAll(hiddensex).attr("visibility","hidden")
+        d3.selectAll(deptoclass + "," + sexoclass).attr("visibility","visible");
+
+        if (hiddendept != "." & hiddensex != "."){
+          d3.selectAll(hiddendept + "," + hiddensex).attr("visibility","hidden");
+        } else if (hiddensex != "."){
+          d3.selectAll(hiddensex).attr("visibility","hidden");
+        } else if (hiddendept != "."){
+          d3.selectAll(hiddendept).attr("visibility","hidden");
         }
       }
       return false;

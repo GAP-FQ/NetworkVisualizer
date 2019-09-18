@@ -222,7 +222,7 @@ function initializeDisplay() {
     .enter()
     .append("line")
     .attr("class", function(d) {
-      return d[typename].replace(/\s+/g, '') + " link " + " " +
+      return d[typename] + " link " + " " +
       d["source_dept"].replace(/\s+/g, '') + " " +
       d["target_dept"].replace(/\s+/g, '');
     })
