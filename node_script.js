@@ -3,7 +3,7 @@
 //http://pablobarbera.com/big-data-upf/html/02b-networks-descriptive-analysis.html
 //https://bl.ocks.org/steveharoz/raw/8c3e2524079a8c440df60c1ab72b5d03/
 //Variables
-var node_size = 50;
+var node_size = 75;
 var link_size = 1;
 var outercolor = "#2B3E50";
 var linkcolor = "white";
@@ -13,12 +13,14 @@ var selected_color = "orange";
 var selected_size = 7;
 var node_border_size = 0.5
 var database = "profesores_v1.json";
-var typename = "Sex";
-var colorname = "Department";
+var typename  = "sex";
+var colorname = "department";
 var sizename = "pubs";
 var uniquetype = ["M", "F"];
-var uniquecolor = ['IQ', 'IM', 'BQ', 'QO', 'AyB', 'FyQT', 'BIO', 'QAN', 'QIyN',
-  'FQ', 'FARM', 'SISAL', 'USAI', 'MAT'];
+var uniquecolor = ['Ingeniería Química', 'Ingeniería Metalúrgica', 'Bioquímica',
+'Química Orgánica', 'Alimentos y Biotecnología', 'Física y Química Teórica',
+'Biología', 'Química Analítica', 'Química Inorgánica y Nuclear', 'Fisicoquímica',
+'Farmacia', 'SISAL', 'USAII', 'Matemáticas'].map(function(x){ return x.replace(/\s/g, '');});
 var scaletype = "linear" //"log"
 var loading_hidden = false;
 
@@ -48,13 +50,16 @@ var padding = {
   left: 30
 };
 
-var innerWidth = outerWidth - margin.left - margin.right,
-  innerHeight = outerHeight - margin.top - margin.bottom,
-  width = innerWidth - padding.left - padding.right,
-  height = innerHeight - padding.top - padding.bottom;
-
+var innerWidth  = outerWidth  - margin.left - margin.right,
+    innerHeight = outerHeight - margin.top  - margin.bottom,
+    width  = innerWidth  - padding.left - padding.right,
+    height = innerHeight - padding.top  - padding.bottom;
 
 const forcePropertiesOriginal = {
+  characteristics: {
+    node_size: node_size,
+    link_size: link_size
+  },
   center: {
     x: 0.5,
     y: 0.5
@@ -77,7 +82,7 @@ const forcePropertiesOriginal = {
     y: 0.5
   },
   link: {
-    distance: 30,
+    distance: 100,
   }
 }
 
@@ -110,10 +115,13 @@ svg.call(d3.zoom().on("zoom", function() {
 svg.on("click",
   function() {
     while (selected_nodes.length > 0) {
-      d3.select(selected_nodes.pop()).style("stroke-width", node_border_size).style("stroke", linkcolor);
+      d3.select(selected_nodes.pop())
+      .style("stroke-width", node_border_size)
+      .style("stroke", linkcolor);
     }
     while (selected_links.length > 0) {
-      d3.select(selected_links.pop()).style("stroke", linkcolor);
+      d3.select(selected_links.pop())
+      .style("stroke", linkcolor);
     }
   }
 )
@@ -143,8 +151,6 @@ function initializeForces() {
   // apply properties to each of the forces
   updateForces();
 }
-
-
 
 // apply new force properties
 function updateForces() {
@@ -183,7 +189,6 @@ function SelectDeselect(poparray, pusharray, myvar, nodepop) {
   //Stop d3js propagation
   d3.event.stopPropagation();
 
-
   //Push node to change color
   if (poparray.length > 0) {
     var popable = poparray.pop();
@@ -208,7 +213,6 @@ function SelectDeselect(poparray, pusharray, myvar, nodepop) {
 
 }
 
-
 // generate the svg objects and force simulation
 function initializeDisplay() {
 
@@ -218,7 +222,9 @@ function initializeDisplay() {
     .enter()
     .append("line")
     .attr("class", function(d) {
-      return d[typename] + " link" + " " + d[colorname];
+      return d[typename].replace(/\s+/g, '') + " link " + " " +
+      d["source_dept"].replace(/\s+/g, '') + " " +
+      d["target_dept"].replace(/\s+/g, '');
     })
     .attr("stroke-width", function(d) {
       return link_size*d.articlesbycouple;
@@ -247,7 +253,7 @@ function initializeDisplay() {
     .enter().append("g")
     .style("stroke", "white").style("stroke-width", node_border_size)
     .attr("class", function(d) {
-      return d[typename].replace(/\s+/g, '') + " node" + " " + d[colorname].replace(/\s+/g, '');
+      return d[typename].replace(/\s+/g, '') + " node " + d[colorname].replace(/\s+/g, '');
     })
     .on("mouseover", function(d) {
       d3.select(this).style("stroke-width", selected_size).style("stroke", selected_color);
@@ -281,7 +287,7 @@ function initializeDisplay() {
   }
 
   for (var i = 0; i < uniquecolor.length; i++) {
-    d3.selectAll("." + uniquecolor[i].replace(/\s/g, '')).style("fill", "#" + mycolors[i]);
+    d3.selectAll("." + uniquecolor[i]).style("fill", "#" + mycolors[i]);
   }
 
 }
@@ -334,7 +340,11 @@ function updateDisplay() {
   for (var i = 0; i < Math.min(uniquetype.length, d3symbols.length); i++) {
     d3.selectAll(".vertices" + i)
       .attr("d", d3.symbol().type(d3symbols[i]).size(function(d) {
-        return node_size * d.Number_of_articles
+        if (scaletype == "linear") {
+          return node_size * d.Number_of_articles;
+        } else if (scaletype == "log") {
+          return node_size * Math.log(d.Number_of_articles + 2);
+        }
       }));
   }
   d3.selectAll("line")
@@ -343,7 +353,6 @@ function updateDisplay() {
     });
 
 }
-//TODO FIXME
 
 
 // convenience function to update everything (run after UI input)
@@ -377,7 +386,10 @@ function show_tooltip_link(d, mydiv, mybool) {
     .duration(200)
     .style("opacity", .95);
 
-  var content = d.articlesbycouple + " publicaciones conjuntas";
+  var content = d.articlesbycouple + " publicaciones conjuntas <br/>" +
+  "Departamentos: <br/>" +
+  " - " + d.source_dept + "<br/>" +
+  " - " + d.target_dept + ".";
   var thename = d.source_name + "-" + d.target_name;
 
   //Add card header
@@ -403,10 +415,10 @@ function show_tooltip_node(d, mydiv, clicked) {
     .style("opacity", .95);
 
   var content = "<p class='card-text'>" +
-    "<i>" + d.Department + "</i>" + "<br/>" +
+    "<i>" + d.department + "</i>" + "<br/>" +
     d.Position + "<br/>" +
     d.Email + "<br/>" +
-    "Artículos:" + d.Number_of_articles + "<br/>" +
+    "Artículos: " + d.Number_of_articles + "<br/>" +
     "Colaboradores: " + d.Collaborations + "</p>";
   var thename = d.Name + " " + d.LastName1 + " " + d.LastName2;
 

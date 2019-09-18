@@ -15,20 +15,29 @@ $(document).ready(function() {
   $('option').mousedown(function(e) {
       e.preventDefault();
       $(this).prop('selected', !$(this).prop('selected'));
-      var misdeptos = $("#selectdept").val();
+
+      //https://stackoverflow.com/questions/24403732/check-if-array-is-empty-or-does-not-exist-js
+      var misdeptos = $("#selectdept").val()
+      var todos     = false
+      var ninguno   = false
+      if (misdeptos && misdeptos.length){
+        misdeptos = misdeptos.map(function(x){return x.replace(/\s/g, '')});
+        todos     = misdeptos.includes("[TODOS]");
+        ninguno   = misdeptos.includes("[NINGUNO]");
+      } else if (misdeptos == null) {
+        ninguno   = true;
+      };
       var misexo    = $("#selectsex").val();
-      var todos     = misdeptos.includes("[TODOS]")
-      var ninguno   = misdeptos.includes("[NINGUNO]")
       if (todos){
         misdeptos.splice(misdeptos.indexOf("[TODOS]"), 1);
       }
 
-      if (ninguno){
+      if (ninguno && misdeptos){
         misdeptos.splice(misdeptos.indexOf("[NINGUNO]"), 1);
       }
 
       //Loop through se and dept
-      if (misexo == null & !todos){
+      if (misexo == null && !todos){
         d3.selectAll(".node,.link").attr("visibility","hidden");
       } else if (misdeptos == null & !todos){
         d3.selectAll(".node,.link").attr("visibility","hidden");
@@ -441,9 +450,11 @@ $(document).ready(function() {
   $("#resetbutton").click(function() {
 
     forceProperties = $.extend(true, {}, forcePropertiesOriginal);
+    node_size       = forcePropertiesOriginal.characteristics.node_size;
+    link_size       = forcePropertiesOriginal.characteristics.link_size;
     $("#inputStrength").val(forcePropertiesOriginal.charge.strength)
-    $("#inputNodeSize").val(node_size);
-    $("#inputLinkSize").val(link_size);
+    $("#inputNodeSize").val(forcePropertiesOriginal.characteristics.node_size);
+    $("#inputLinkSize").val(forcePropertiesOriginal.characteristics.link_size);
     $("#inputCenterX").val(forcePropertiesOriginal.center.x);
     $("#inputCenterY").val(forcePropertiesOriginal.center.y);
     $("#inputDistanceMin").val(forcePropertiesOriginal.charge.distanceMin);
