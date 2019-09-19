@@ -197,7 +197,8 @@
         <div class="card-body">
           <div class="form-group">
             <div class="input-group mb-3">
-                Personal Académico de la Facultad de Química <br> Profesores de Tiempo Completo, Técnicos Académicos, Profesores Eméritos
+                <!-- Personal Académico de la Facultad de Química <br> (Profesores de Tiempo Completo, Técnicos Académicos, Profesores Eméritos) <br> que cuenten con algun apoyo económico <br> (PAIP, PAL, CONACyT) -->
+                Profesores de Tiempo Completo de la Facultad de Química con apoyo del PAIIP
             </div>
           </div>
         </div>
@@ -271,10 +272,10 @@
             <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterX"><br>
             <label class="col-form-label" for="inputCenterY">Origen de Y</label>
             <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterY"><br>
-            <label class="col-form-label" for="inputDistanceMin">Min distancia entre nodos</label>
-            <input type="number" class="form-control" placeholder="Min distancia entre nodos" id="inputDistanceMin">
-            <label class="col-form-label" for="inputDistanceMax">Max distancia entre nodos</label>
-            <input type="number" class="form-control" placeholder="Max distancia entre nodos" id="inputDistanceMax">
+            <label class="col-form-label" for="inputDistanceMin">Distancia mínima entre nodos</label>
+            <input type="number" class="form-control" placeholder="Distancia mínima entre nodos" id="inputDistanceMin">
+            <label class="col-form-label" for="inputDistanceMax">Distancia máxima entre nodos</label>
+            <input type="number" class="form-control" placeholder="Distancia máxima entre nodos" id="inputDistanceMax">
             <label class="col-form-label" for="inputXGravity">Fuerza en X</label>
             <input type="range" min="0" max="1" step="0.01" value="0" data-orientation="horizontal" id="inputXGravity"><br>
             <label class="col-form-label" for="inputYGravity">Fuerza en Y</label>
@@ -391,7 +392,7 @@
         </div>
         <div class="card-body">
           <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
-          <p class="card-text">Descripción de la red</p>
+          <p class="card-text">Propiedades de la red</p>
         </div>
       </div>
       <div class="card border-danger mb-3" id="highest-degree-nodes" style="max-width: 20rem;" tooltip="Académicos con mayor cantidad de colaboraciones con otros académicos sin considerar la fuerza." tooltip-persistent>
