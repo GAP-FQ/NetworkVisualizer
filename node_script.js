@@ -32,8 +32,7 @@ function onlyUnique(value, index, self) {
 
 //Get d3js symbols
 var d3symbols = [d3.symbolCircle, d3.symbolSquare, d3.symbolTriangle,
-  d3.symbolStar, d3.symbolDiamond, d3.symbolWye, d3.symbolCross
-];
+  d3.symbolStar, d3.symbolDiamond, d3.symbolWye, d3.symbolCross];
 
 var mycolors = palette('mpn65', uniquecolor.length);
 
