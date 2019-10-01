@@ -5,7 +5,7 @@ var opanel = true;
 
 $(document).ready(function() {
 
-
+  $('#selectano option:eq(0)').prop('selected', true);
   $('#selectdept option').prop('selected', true);
   $('#selectsex option').prop('selected', true);
   $("#selectdept option:eq(0)").prop('selected',false) //TODOS
