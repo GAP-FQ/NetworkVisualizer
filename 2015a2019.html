@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<!-- FROM: https://www.d3-graph-gallery.com/graph/network_basic.html -->
+<meta charset="utf-8">
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name='description' content='Network visualizer'>
+<meta name='author' content='Rodrigo Zepeda Tello & Karl García Ruiz'>
+
+<head>
+  <link href="multiselect.css" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <style>
+    /* set the CSS */
+
+    /* https://stackoverflow.com/questions/7117073/how-to-add-a-tooltip-to-a-div */
+    [tooltip]:before {
+      /* needed - do not touch */
+      content: attr(tooltip);
+      position: absolute;
+      opacity: 0;
+
+      /* customizable */
+      transition: all 0.15s ease;
+      padding: 10px;
+      color: #333;
+      border-radius: 0px;
+      box-shadow: 3px 3px 2px #4E5D6C;
+      z-index: 98;
+    }
+
+    [tooltip]:hover:before {
+      /* needed - do not touch */
+      opacity: 1;
+
+      /* customizable */
+      background: #5bc0de;
+      margin-top: -40px;
+      margin-left: -10px;
+    }
+
+    [tooltip]:not([tooltip-persistent]):before {
+      pointer-events: none;
+    }
+
+    [draggable=true] {
+      cursor: move;
+    }
+
+    body {
+      font: 12px Arial;
+      background-color: #2B3E50;
+      overflow: hidden;
+    }
+
+
+    .links line {
+      stroke: #999;
+      stroke-opacity: 0.6;
+    }
+
+    .btn-file {
+      background-color: white;
+      border-color: #000026;
+    }
+
+    .selected-link {
+      stroke: red;
+    }
+
+    div.tooltip {
+      position: absolute;
+      text-align: left;
+      width: 250px;
+      height: 250px;
+      padding: 0px;
+      /*overflow: scroll;*/
+      /*color: black;
+    font: 16px sans-serif;
+    border: 0px;*/
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .hidebutton {
+      height: 25px;
+      width: 6.3%;
+      top: 1px;
+      position: fixed;
+    }
+
+    .panel-container {
+      height: 100vh;
+      width: 20%;
+      position: fixed;
+      text-align: left;
+      padding-top: 25px;
+      opacity: 0.95;
+      overflow-y: scroll;
+
+      /* Hide scrollbars */
+      scrollbar-width: none !important;
+      overflow: -moz-scrollbars-none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    /*Hide scrollbars*/
+    .panel-container::-webkit-scrollbar {
+      width: 0 !important
+    }
+
+
+    .stats-container {
+      top: 0px;
+      right: 0px;
+    }
+
+    .first-leftpanel {
+      left: 0%;
+      width: 20%;
+    }
+
+    .first-rightpanel {
+      right: 0%;
+      width: 20%;
+    }
+
+    .second-leftpanel {
+      left: 20%;
+      width: 20%;
+    }
+
+    .third-leftpanel {
+      left: 40%;
+      width: 20%;
+    }
+
+    .second-rightpanel {
+      right: 20%;
+      width: 20%;
+    }
+
+    .analysis-container {
+      top: 0px;
+      left: 0px;
+      padding-right: 0px;
+    }
+
+    .options-container {
+      top: 0px;
+      left: 40%;
+      padding-right: 0px;
+    }
+
+    .filter-container {
+      top: 0px;
+      left: 20%;
+      padding-right: 0px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
+
+    .loading-card {
+      width: 100%;
+      height: 100vh;
+      opacity: 0.5;
+      top: 0%;
+      position: fixed;
+      z-index: 99;
+      text-align: center;
+      display: block;
+      overflow: hidden;
+      font-size: 1000%;
+      padding-top: 20%;
+    }
+  </style>
+
+  <script src="jquery-1.12.4.js"></script>
+  <script src="jquery-ui.js"></script>
+  <script src="palette.js"></script>
+  <script src="rangeslider.min.js"></script>
+  <!-- Load d3.js -->
+  <script src="d3.v4.js"></script>
+</head>
+
+<body>
+
+
+  <!-- INFORMATION PANEL -->
+  <div class="card panel-container analysis-container border-info bg-dark" id="leftpanel">
+    <div class="card-body">
+      <div class="card border-info bg-info mb-3" style="max-width: 20rem; color: black;">
+        <div class="card-header">
+          <h5>INFORMACIÓN</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <div class="input-group mb-3">
+                <!-- Personal Académico de la Facultad de Química <br> (Profesores de Tiempo Completo, Técnicos Académicos, Profesores Eméritos) <br> que cuenten con algun apoyo económico <br> (PAIP, PAL, CONACyT) -->
+                Profesores de Tiempo Completo de la Facultad de Química con apoyo del PAIIP
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--FILTER PANEL -->
+  <div class="card panel-container filter-container border-success bg-dark" id="fpanel">
+    <div class="card-body">
+      <div class="card border-success mb-3" style="max-width: 20rem;">
+        <div class="card-header">
+          <h5>FILTROS</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="selectsex">Género</label>
+            <select multiple="multiple" class="form-control" id="selectsex" size="2">
+              <option selected>M</option>
+              <option selected>F</option>
+              <!--<option selected>O</option>-->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="selectdept">Departamento</label>
+            <select multiple="multiple" class="form-control" id="selectdept" size="16">
+              <option selected>[TODOS]</option>
+              <option selected>[NINGUNO]</option>
+              <option selected>Alimentos y Biotecnología</option>
+              <option selected>Biología</option>
+              <option selected>Bioquímica</option>
+              <option selected>Farmacia</option>
+              <option selected>Fisicoquímica</option>
+              <option selected>Física y Química Teórica</option>
+              <option selected>Ingeniería Metalúrgica</option>
+              <option selected>Ingeniería Química</option>
+              <option selected>Matemáticas</option>
+              <option selected>Química Analítica</option>
+              <option selected>Química Inorgánica y Nuclear</option>
+              <option selected>Química Orgánica</option>
+              <option selected>SISAL</option>
+              <option selected>USAII</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="selectano">Año</label>
+            <ul id ="selectano">
+              <li><a href="index.html">[TODOS]</li>
+              <li><a href="2010.html">2010</a></li>
+              <li><a href="2011.html">2011</a></li>
+              <li><a href="2012.html">2012</a></li>
+              <li><a href="2013.html">2013</a></li>
+              <li><a href="2014.html">2014</a></li>
+              <li><a href="2015.html">2015</a></li>
+              <li><a href="2016.html">2016</a></li>
+              <li><a href="2017.html">2017</a></li>
+              <li><a href="2018.html">2018</a></li>
+              <li><a href="2019.html">2019</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--OPTIONS PANEL -->
+  <div class="card panel-container options-container border-light bg-dark" id="optpanel">
+    <div class="card-body">
+      <div class="card border-light mb-3" style="max-width: 20rem;">
+        <div class="card-header">
+          <h5>OPCIONES</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label class="col-form-label" for="inputNodeSize">Tamaño de nodo</label>
+            <input type="number" class="form-control" placeholder="Tamaño de nodo" value="100" id="inputNodeSize">
+            <label class="col-form-label" for="inputLinkSize">Grosor de arista</label>
+            <input type="number" class="form-control" placeholder="Grosor de arista" value="1" id="inputLinkSize">
+            <label class="col-form-label" for="inputStrength">Carga de nodos</label>
+            <input type="number" class="form-control" placeholder="Carga de nodos" value="1000" id="inputStrength">
+            <label class="col-form-label" for="inputCollision">Colisiones</label>
+            <input type="number" class="form-control" placeholder="Colisiones" value="0.8" id="inputCollision">
+            <label class="col-form-label" for="inputLinkDistance">Longitud de arista</label>
+            <input type="number" class="form-control" placeholder="Longitud de arista" value="10" id="inputLinkDistance">
+            <label class="col-form-label" for="inputCenterX">Origen de X</label>
+            <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterX"><br>
+            <label class="col-form-label" for="inputCenterY">Origen de Y</label>
+            <input type="range" min="0" max="1" step="0.01" value="0.5" data-orientation="horizontal" id="inputCenterY"><br>
+            <label class="col-form-label" for="inputDistanceMin">Distancia mínima entre nodos</label>
+            <input type="number" class="form-control" placeholder="Distancia mínima entre nodos" id="inputDistanceMin">
+            <label class="col-form-label" for="inputDistanceMax">Distancia máxima entre nodos</label>
+            <input type="number" class="form-control" placeholder="Distancia máxima entre nodos" id="inputDistanceMax">
+            <label class="col-form-label" for="inputXGravity">Fuerza en X</label>
+            <input type="range" min="0" max="1" step="0.01" value="0" data-orientation="horizontal" id="inputXGravity"><br>
+            <label class="col-form-label" for="inputYGravity">Fuerza en Y</label>
+            <input type="range" min="0" max="1" step="0.01" value="0" data-orientation="horizontal" id="inputYGravity"><br>
+            <label class="col-form-label" for="inputXGravityCoordinate">Centro de Gravedad (X)</label>
+            <input type="number" class="form-control" placeholder="Centro de Gravedad (X)" value="1000" id="inputXGravityCoordinate">
+            <label class="col-form-label" for="inputYGravityCoordinate">Centro de Gravedad (Y)</label>
+            <input type="number" class="form-control" placeholder="Centro de Gravedad (Y)" value="1000" id="inputYGravityCoordinate">
+            <div style="text-align: center; padding-top: 10px;">
+              <a href="#" class="btn btn-light" id="resetbutton">Restablecer</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NODE PANEL -->
+  <div class="stats-container card border-warning mb-3 bg-dark panel-container first-rightpanel" id="rightpanel">
+    <div class="card-body">
+      <div class="card border-warning bg-warning mb-3" style="color: black; max-width: 20rem;">
+        <div class="card-header">
+          <h5 id="nodename">NODOS</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text" id="nodep">Propiedades de los nodos <br> Da clic en un nodo para obtener información del mismo.</p>
+        </div>
+      </div>
+      <!--<div class="card border-warning mb-3" style="max-width: 20rem;" tooltip="Profesores de Tiempo Completo (PTC) y Técnicos Académicos (TA)." tooltip-persistent>
+        <div class="card-header">Personal Académico</div>
+        <div class="card-body">
+          <p class="card-text">Some</p>
+        </div>
+      </div>-->
+      <div class="card border-warning  mb-3" style="max-width: 20rem;" tooltip="Artículos de los académicos participantes." tooltip-persistent>
+        <div class="card-header">Artículos</div>
+        <div class="card-body">
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+      </div>
+      <div class="card border-warning mb-3" style="max-width: 20rem;">
+        <div class="card-header">Estadísticos</div>
+        <div class="card-body container-fluid">
+          <div class="row">
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;" tooltip="Probabilidad aproximada de que dos académicos colaboren entre sí." tooltip-persistent>
+              <div class="card-header"><small>Colaborar</small></div>
+              <div class="card-body">
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+              tooltip="Indica el grado de colaboración entre los académicos de mayor grado: qué tanto colaboran entre sí los académicos más influyentes." tooltip-persistent>
+              <div class="card-header"><small>Centralidad</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;" tooltip="Es una aproximación al número de rutas más cortas entre nodos que pasan a través de un nodo en particular"
+              tooltip-persistent>
+              <div class="card-header"><small>Betweenness</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+              tooltip="Medición de centralidad: indica el número de nodos entre un colaborador dado y el resto de colaboradores (entre mayor sea el valor menor la centralidad, ya que significa un mayor aislamiento)" tooltip-persistent>
+              <div class="card-header"><small>Cercanía</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card border-warning mb  col-xs-5" style="width: 45%; height: 10%; margin-right: 2%; margin-left: 2.5%;" tooltip="Número de colaboraciones por académico (también considerado como la influencia de cada académico en la red)."
+              tooltip-persistent>
+              <div class="card-header"><small>Grado</small></div>
+              <div class="card-body">
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+            <div class="card border-warning mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+              tooltip="Es una medida ponderada del grado: indica el número de colaboraciones entre un académico y otro; se ve reflejada en el grueso de la arista." tooltip-persistent>
+              <div class="card-header"><small>Fuerza</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card border-warning mb-3  col-xs-5" style="width: 95%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+              tooltip="Indica la centralidad de un nodo considerando cuántos académicos de alto grado participan con un académico dado." tooltip-persistent>
+              <div class="card-header"><small>Coreness</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">Some quick example.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--- GRAPH PANEL --->
+  <div class="stats-container card border-danger mb-3 bg-dark panel-container second-rightpanel" id="panelgraph">
+    <div class="card-body">
+      <div class="card border-danger bg-danger mb-3" style="max-width: 20rem;">
+        <div class="card-header">
+          <h5>RED</h5>
+        </div>
+        <div class="card-body">
+          <!--<h4 class="card-title" id="linkornode">NAME</h4>-->
+          <p class="card-text">Propiedades de la red</p>
+        </div>
+      </div>
+      <div class="card border-danger mb-3" id="highest-degree-nodes" style="max-width: 20rem;" tooltip="Académicos con mayor cantidad de colaboraciones con otros académicos sin considerar la fuerza." tooltip-persistent>
+        <div class="card-header">Nodos de más alto grado</div>
+        <div class="card-body">
+          <p class="card-text">Some</p>
+        </div>
+      </div>
+      <div class="card border-danger mb-3" style="max-width: 20rem;" tooltip="Aristas con mayor grosor: mayor número de colaboraciones entre dos académicos en particular." tooltip-persistent>
+        <div class="card-header">Vínculos de mayor ponderación</div>
+        <div class="card-body">
+          <p class="card-text">NA</p>
+        </div>
+      </div>
+      <div class="card border-danger mb-3" style="max-width: 20rem;">
+        <div class="card-header">Estadísticos</div>
+        <div class="card-body container-fluid">
+          <div class="row">
+            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;" tooltip="Promedio de aristas entre dos académicos (tamaño de la red)" tooltip-persistent>
+              <div class="card-header"><small>Distancia promedio</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">4.80078</p>
+              </div>
+            </div>
+            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;" tooltip="Distancia más larga, en número de aristas, entre dos académicos dados (tamaño de la red)." tooltip-persistent>
+              <div class="card-header"><small>Diámetro</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">49</p>
+              </div>
+            </div>
+            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;" tooltip="Es la razón entre el número de aristas de la red contra el total de aristas posibles (densidad de la red)."
+              tooltip-persistent>
+              <div class="card-header"><small>Densidad</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">0.008776444</p>
+              </div>
+            </div>
+            <div class="card border-danger mb-3  col-xs-5" style="width: 45%; height: 10%;  margin-right: 1%; margin-left: 2%;"
+              tooltip="Probabilidad de que académicos que compartan un tercer colaborador (en distintas colaboraciones) estén conectados entre sí: coeficiente de agrupamiento." tooltip-persistent>
+              <div class="card-header"><small>Transitividad</small></div>
+              <div class="card-body">
+                <!--<h4 class="card-title">Primary card title</h4>-->
+                <p class="card-text">0.06230032</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUTTONS FOR PANELS -->
+  <button class="hidebutton first-leftpanel card border-info bg-info" style="font-size: 20px; width: 6.3%;" id="infopanel"><b>I↳</b></button>
+  <button class="hidebutton third-leftpanel card border-light bg-light" style="font-size: 20px; width: 6.3%;" id="optionpanel"><b>O↳</b></button>
+  <button class="hidebutton second-leftpanel card border-success bg-success" style="font-size: 20px; width: 6.3%;" id="filterpanel"><b>F↳</b></button>
+  <button class="hidebutton card border-danger bg-danger second-rightpanel" style="font-size: 20px; width: 6.3%;" id="graphpanel"><b>↲G</b></button>
+  <button class="hidebutton card border-warning bg-warning first-rightpanel" style="font-size: 20px; width: 6.3%;" id="nodepanel"><b>↲N</b></button>
+
+  <!-- CANVAS -->
+  <div id="my_dataviz" style="text-align: center; height: 100vh;"></div>
+
+  <!-- LOADING SCREEN-->
+  <div id="loading" class="card border-dark bg-dark loading-card">
+    <p id="alpha_value"></p>
+  </div>
+
+
+  <script src="node_script_2015a2019.js"></script>
+  <script src="interactive_dom.js"></script>
+
+
+
+</body>
